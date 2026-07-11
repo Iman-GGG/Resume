@@ -11,8 +11,8 @@ const _geist = Geist({subsets: ["latin"]});
 const _geistMono = Geist_Mono({subsets: ["latin"]});
 
 export const metadata: Metadata = {
-    title: 'v0 IRL — Prompt to Production | NYC February 5th, 2026',
-    description: 'v0 is launching its biggest product update yet. Join us for v0 IRL events around the world. One week. Global hackathons. Real apps, real work.',
+    title: 'Iman Geng / 耿艺曼 — 产品经理 & AI智能体应用师',
+    description: '5年BIM软件产品经验，AI独立开发者。PKPM-BIM / GNA数维 / dougong。瞎芝麻、林则鼠。',
     generator: 'v0.app',
     icons: {
         icon: [

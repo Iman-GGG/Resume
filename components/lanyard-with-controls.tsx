@@ -98,8 +98,8 @@ export default function LanyardWithControls({
 
   // Share message templates
   const shareMessage = appliedName
-    ? `I'll be at @v0 Prompt to Production New York City! Check out my personalized lanyard`
-    : `Check out v0 IRL New York City! Create your personalized event lanyard`;
+    ? `I'm Iman Geng — PM, BIM specialist & AI builder. Check out my card!`
+    : `Iman Geng / 耿艺曼 — Product Manager & AI Builder`;
 
   const handleShareX = useCallback(() => {
     const url = getShareableUrl();
@@ -168,6 +168,9 @@ export default function LanyardWithControls({
           userName={inputValue}
           variant={cardVariant}
           onTextureReady={handleTextureReady}
+          email="767189834@qq.com"
+          phone="17815381850"
+          github="Iman-GGG"
         />
         <div className={containerClassName}>
           <div className="flex h-full items-center justify-center">
@@ -186,8 +189,9 @@ export default function LanyardWithControls({
         userName={inputValue}
         variant={cardVariant}
         onTextureReady={handleTextureReady}
-        city='new york'
-        date='05.02.2026'
+        email="767189834@qq.com"
+        phone="17815381850"
+        github="Iman-GGG"
       />
       <Lanyard
         key={textureKey}
@@ -200,7 +204,7 @@ export default function LanyardWithControls({
         <div className="mx-auto max-w-md lg:mx-0 lg:ml-auto">
           <div className="mb-4 flex items-center justify-between">
             <label className="text-sm font-medium text-muted-foreground p-1 bg-background">
-              Personalize your card
+              定制你的名片
             </label>
             <div className="flex items-center gap-3">
               <label className="flex cursor-pointer items-center gap-1.5">
@@ -255,7 +259,7 @@ export default function LanyardWithControls({
                 value={inputValue}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
-                placeholder="Enter your name"
+                placeholder="输入你的名字"
                 maxLength={MAX_CHARACTERS}
                 className="h-10 w-full rounded-md border border-border bg-background px-3 py-2 pr-16 font-mono text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
               />

@@ -10,6 +10,9 @@ interface CardTemplateProps {
   onTextureReady: (dataUrl: string) => void;
   city?: string;
   date?: string;
+  email?: string;
+  phone?: string;
+  github?: string;
 }
 
 export interface CardTemplateRef {
@@ -20,7 +23,7 @@ export interface CardTemplateRef {
 const CANVAS_SIZE = 1376;
 
 const CardTemplate = forwardRef<CardTemplateRef, CardTemplateProps>(
-  ({ userName, variant, onTextureReady, city, date }, ref) => {
+  ({ userName, variant, onTextureReady, city, date, email, phone, github }, ref) => {
     const [baseImage, setBaseImage] = useState<HTMLImageElement | null>(null);
 
     const imageSrc = variant === "dark" ? "/card-base-dark.png" : "/card-base-light.png";
@@ -94,6 +97,26 @@ const CardTemplate = forwardRef<CardTemplateRef, CardTemplateProps>(
         dateRender.fillText(date.toUpperCase(), dateTextX, dateTextY);
       }
 
+      // Render contact info (email, phone, github) on the card
+      let contactY = CANVAS_SIZE - 600;
+      const contactX = (CANVAS_SIZE / 2) - 55;
+      const contactFontSize = 28;
+
+      const renderContactLine = (label: string, value: string) => {
+        const ctx2 = canvas.getContext("2d");
+        if (!ctx2) return;
+        ctx2.fillStyle = '#878787';
+        ctx2.font = `normal ${contactFontSize}px "Geist Mono", monospace`;
+        ctx2.textAlign = "right";
+        ctx2.textBaseline = "middle";
+        ctx2.fillText(value, contactX, contactY);
+        contactY += 36;
+      };
+
+      if (email) renderContactLine('', email);
+      if (phone) renderContactLine('', phone);
+      if (github) renderContactLine('', `github.com/${github}`);
+
 
       const dataUrl = canvas.toDataURL("image/png");
       onTextureReady(dataUrl);
@@ -163,6 +186,26 @@ const CardTemplate = forwardRef<CardTemplateRef, CardTemplateProps>(
         dateRender.fillText(date.toUpperCase(), dateTextX, dateTextY);
       }
 
+      // Render contact info on export card
+      let exportContactY = CANVAS_SIZE - 600;
+      const exportContactX = (CANVAS_SIZE / 2) - 55;
+      const exportFontSize = 28;
+
+      const renderExportContact = (value: string) => {
+        const ctx2 = fullCanvas.getContext("2d");
+        if (!ctx2) return;
+        ctx2.fillStyle = '#878787';
+        ctx2.font = `normal ${exportFontSize}px "Geist Mono", monospace`;
+        ctx2.textAlign = "right";
+        ctx2.textBaseline = "middle";
+        ctx2.fillText(value, exportContactX, exportContactY);
+        exportContactY += 36;
+      };
+
+      if (email) renderExportContact(email);
+      if (phone) renderExportContact(phone);
+      if (github) renderExportContact(`github.com/${github}`);
+
       // Create cropped export canvas (excludes bottom 334px)
       const exportCanvas = document.createElement("canvas");
       exportCanvas.width = CANVAS_SIZE;
@@ -181,7 +224,7 @@ const CardTemplate = forwardRef<CardTemplateRef, CardTemplateProps>(
       // Export at full resolution
       const dataUrl = exportCanvas.toDataURL("image/png", 1.0);
       const link = document.createElement("a");
-      link.download = `v0-guadalajara-${userName || "card"}.png`;
+      link.download = `iman-geng-${userName || "card"}.png`;
       link.href = dataUrl;
       link.click();
     };

@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import LanyardPage from "@/components/lanyard-page";
 
-// Event details - you can edit these
-const EVENT_CITY = "New York City";
-const EVENT_DATE = "February 2026";
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://v0guadalajara.vercel.app";
+// Personal details
+const EVENT_CITY = "Iman Geng";
+const EVENT_DATE = "耿艺曼";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://gengyiman.vercel.app";
 
 // Decryption helper for metadata generation
 function decryptLanyardData(encrypted: string): { username: string; variant: "dark" | "light" } | null {
@@ -50,13 +50,13 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
   const userName = data?.username || "Attendee";
   const hasUser = !!data?.username;
   
-  const title = hasUser 
-    ? `${userName} | v0 IRL ${EVENT_CITY}`
-    : `Generate Your Lanyard | v0 IRL ${EVENT_CITY}`;
-  
+  const title = hasUser
+    ? `${userName} | ${EVENT_CITY} / ${EVENT_DATE}`
+    : `Iman Geng / 耿艺曼 — 产品经理 & AI 智能体应用师`;
+
   const description = hasUser
-    ? `${userName} is attending v0 IRL ${EVENT_CITY} - ${EVENT_DATE}. Join us for Prompt to Production!`
-    : `Create and customize your personalized v0 IRL ${EVENT_CITY} event lanyard. Choose your color variant and download it as a high-resolution PNG.`;
+    ? `${userName} 的名片 - ${EVENT_CITY} / ${EVENT_DATE}`
+    : `耿艺曼 (Iman Geng) 的个人作品集网站。5年BIM产品经验，独立AI开发者。`;
 
   const pageUrl = encrypted 
     ? `${SITE_URL}/lanyard?u=${encrypted}`
@@ -78,7 +78,7 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
       title,
       description,
       url: pageUrl,
-      siteName: `v0 IRL ${EVENT_CITY}`,
+      siteName: 'Iman Geng 个人网站',
       type: "website",
       locale: "en_US",
       images: [

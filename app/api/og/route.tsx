@@ -53,10 +53,10 @@ async function loadGoogleFont (font: string, text: string) {
 export async function GET(request: Request) {
   try {
 
-      // Event details - you can edit these
-      const EVENT_CITY = "guadalajara";
-      const EVENT_DATE = "jueves 5 de febrero";
-      const TITLE = 'Prompt to Production'
+      // Personal details
+      const EVENT_CITY = "Iman Geng";
+      const EVENT_DATE = "gengyiman.vercel.app";
+      const TITLE = '耿艺曼'
 
     const { searchParams } = new URL(request.url);
     const encrypted = searchParams.get("u");

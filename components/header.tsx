@@ -3,7 +3,7 @@ import Link from 'next/link'
 import {Menu, X} from 'lucide-react'
 import {Button} from '@/components/ui/button'
 import React from 'react'
-import V0Icon from "@/components/icons/v0-icon";
+import { Github } from 'lucide-react'
 
 export const HeroHeader = () => {
     const [menuState, setMenuState] = React.useState(false)
@@ -19,8 +19,8 @@ export const HeroHeader = () => {
                                 href="/"
                                 aria-label="home"
                                 className="flex items-center space-x-2">
-                                <V0Icon size={30} className='text-foreground'/>
-                                <span className='font-mono'>IRL - NYC</span>
+                                <span className='font-mono text-lg'>Iman Geng</span>
+                                <span className='text-muted-foreground font-mono text-sm hidden sm:inline'>/ 耿艺曼</span>
                             </Link>
 
                             <button
@@ -38,9 +38,11 @@ export const HeroHeader = () => {
                             <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
                                 <Button
                                     asChild
-                                    size="sm">
-                                    <Link href="https://meetup-sdk.vercel.com/">
-                                        <span>Host an Event</span>
+                                    size="sm"
+                                    variant="ghost">
+                                    <Link href="https://github.com/Iman-GGG" target="_blank">
+                                        <Github className="size-4 mr-1" />
+                                        <span>GitHub</span>
                                     </Link>
                                 </Button>
                             </div>

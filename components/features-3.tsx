@@ -1,110 +1,134 @@
-import {Card, CardContent, CardHeader} from '@/components/ui/card'
-import {CircleDollarSignIcon, EarthIcon, UsersIcon} from 'lucide-react'
-import React, {ReactNode} from 'react'
+import React from 'react'
+import Image from 'next/image'
 import {TextEffect} from "@/components/motion-primitives/text-effect";
 import {transitionVariants} from "@/lib/utils";
 import {AnimatedGroup} from "@/components/motion-primitives/animated-group";
+import { ExternalLink } from 'lucide-react';
+
+const projects = [
+  {
+    name: '瞎芝麻',
+    tag: '股票量化筛选平台',
+    desc: '独立用 AI 开发的全栈股票量化筛选工具，覆盖选股、回测、信号监控等核心量化需求。',
+    link: 'https://xiazhima.vercel.app',
+    images: null,
+    tech: ['Next.js', 'Python', '量化交易'],
+  },
+  {
+    name: '林则鼠',
+    tag: '公益劝烟嘴替 · 微信小程序',
+    desc: '公益戒烟倡导小程序，用趣味化的方式帮助公共场所劝阻吸烟。微信直接搜索「林则鼠」即可使用。',
+    link: null,
+    images: [1, 2, 3, 4, 5, 6, 7, 8],
+    tech: ['微信小程序', '公益'],
+  },
+]
+
+const certs = [
+  { name: '信息系统项目管理师', icon: '📐' },
+  { name: 'AI 智能体应用师', icon: '🤖' },
+]
 
 export default function Features() {
     return (
-        <section className="py-16 md:py-32 dark:bg-transparent bg-transparent">
+        <section id="projects" className="py-16 md:py-32 dark:bg-transparent bg-transparent">
             <div className="@container mx-auto max-w-5xl px-6">
-                <div className="text-center">
+                <div className="text-center mb-12">
                     <TextEffect
                         triggerOnView
                         preset="fade-in-blur"
                         speedSegment={0.3}
                         as="h2"
                         className="text-balance text-4xl font-semibold lg:text-5xl">
-                        Join us for NYC's first official v0 IRL event
+                        个人项目
+                    </TextEffect>
+                    <p className="text-muted-foreground mt-4 text-lg">独立用 AI 开发的作品</p>
+                </div>
+
+                <div className="grid gap-8 md:grid-cols-2">
+                    {projects.map((project) => (
+                        <AnimatedGroup
+                            key={project.name}
+                            triggerOnView
+                            variants={{
+                                container: {
+                                    visible: {
+                                        transition: { staggerChildren: 0.05, delayChildren: 0.3 },
+                                    },
+                                },
+                                ...transitionVariants,
+                            }}
+                        >
+                            <div className="rounded-2xl border border-border bg-card/50 overflow-hidden h-full flex flex-col">
+                                {/* Screenshots for 林则鼠 */}
+                                {project.images && (
+                                    <div className="grid grid-cols-4 gap-2 p-4 bg-muted/30">
+                                        {project.images.slice(0, 8).map((n) => (
+                                            <Image
+                                                key={n}
+                                                src={`/林则鼠${n}.png`}
+                                                alt={`${project.name} 截图 ${n}`}
+                                                width={160}
+                                                height={284}
+                                                className="rounded-lg w-full h-auto"
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                                {/* Placeholder for 瞎芝麻 */}
+                                {!project.images && (
+                                    <div className="h-40 bg-gradient-to-br from-emerald-900/30 to-blue-900/30 flex items-center justify-center">
+                                        <span className="text-5xl opacity-30">📈</span>
+                                    </div>
+                                )}
+                                <div className="p-5 flex-1 flex flex-col">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <h3 className="font-semibold text-xl">{project.name}</h3>
+                                        <span className="text-xs font-mono text-muted-foreground bg-muted px-2 py-0.5 rounded-full">{project.tag}</span>
+                                    </div>
+                                    <p className="text-sm text-muted-foreground mb-4 flex-1">{project.desc}</p>
+                                    <div className="flex flex-wrap gap-1.5 mb-4">
+                                        {project.tech.map((t) => (
+                                            <span key={t} className="text-[11px] font-mono text-muted-foreground bg-muted px-2 py-0.5 rounded">{t}</span>
+                                        ))}
+                                    </div>
+                                    {project.link && (
+                                        <a href={project.link} target="_blank" rel="noopener noreferrer"
+                                            className="inline-flex items-center gap-1 text-sm text-primary hover:underline mt-auto">
+                                            <ExternalLink className="size-3" />
+                                            xiazhima.vercel.app
+                                        </a>
+                                    )}
+                                    {!project.link && (
+                                        <p className="text-xs text-muted-foreground mt-auto">微信搜索「林则鼠」即可使用</p>
+                                    )}
+                                </div>
+                            </div>
+                        </AnimatedGroup>
+                    ))}
+                </div>
+
+                {/* Certifications */}
+                <div className="text-center mt-20 mb-8">
+                    <TextEffect
+                        triggerOnView
+                        preset="fade-in-blur"
+                        speedSegment={0.3}
+                        as="h2"
+                        className="text-balance text-3xl font-semibold lg:text-4xl">
+                        专业认证
                     </TextEffect>
                 </div>
-                <AnimatedGroup
-                    triggerOnView
-                    variants={{
-                        container: {
-                            visible: {
-                                transition: {
-                                    staggerChildren: 0.05,
-                                    delayChildren: 0.75,
-                                },
-                            },
-                        },
-                        ...transitionVariants,
-                    }}
-                >
-                    <Card
-                        className="@min-4xl:max-w-full @min-4xl:grid-cols-3 @min-4xl:divide-x @min-4xl:divide-y-0 mx-auto mt-8 grid max-w-sm divide-y overflow-hidden shadow-zinc-950/5 *:text-center md:mt-16">
-                        <div className="group shadow-zinc-950/5">
-                            <CardHeader className="pb-3">
-                                <CardDecorator>
-                                    <CircleDollarSignIcon
-                                        className="size-6"
-                                        aria-hidden
-                                    />
-                                </CardDecorator>
-
-                                <h3 className="mt-6 font-medium text-xl">Free v0 Credits</h3>
-                            </CardHeader>
-
-                            <CardContent>
-                                <p className="text-sm text-muted-foreground">Credits to use towards building with
-                                    v0.</p>
-                            </CardContent>
+                <div className="flex flex-wrap justify-center gap-4">
+                    {certs.map((cert) => (
+                        <div key={cert.name}
+                            className="inline-flex items-center gap-2 rounded-xl border border-border bg-card/50 backdrop-blur-sm px-6 py-4">
+                            <span className="text-2xl">{cert.icon}</span>
+                            <span className="font-medium">{cert.name}</span>
                         </div>
-
-                        <div className="group shadow-zinc-950/5">
-                            <CardHeader className="pb-3">
-                                <CardDecorator>
-                                    <EarthIcon
-                                        className="size-6"
-                                        aria-hidden
-                                    />
-                                </CardDecorator>
-
-                                <h3 className="mt-6 font-medium text-xl">Global Gallery</h3>
-                            </CardHeader>
-
-                            <CardContent>
-                                <p className="mt-3 text-sm text-muted-foreground">Every project showcased in a worldwide
-                                    exhibition</p>
-                            </CardContent>
-                        </div>
-
-                        <div className="group shadow-zinc-950/5">
-                            <CardHeader className="pb-3">
-                                <CardDecorator>
-                                    <UsersIcon
-                                        className="size-6"
-                                        aria-hidden
-                                    />
-                                </CardDecorator>
-
-                                <h3 className="mt-6 font-medium text-xl">Community Voting</h3>
-                            </CardHeader>
-
-                            <CardContent>
-                                <p className="mt-3 text-sm text-muted-foreground">Builders vote for favorites, winners
-                                    get
-                                    prizes</p>
-                            </CardContent>
-                        </div>
-                    </Card>
-                </AnimatedGroup>
+                    ))}
+                </div>
             </div>
         </section>
     )
 }
-
-const CardDecorator = ({children}: { children: ReactNode }) => (
-    <div
-        className="mask-radial-from-40% mask-radial-to-60% relative mx-auto size-36 duration-200 [--color-border:color-mix(in_oklab,var(--color-zinc-950)10%,transparent)] group-hover:[--color-border:color-mix(in_oklab,var(--color-zinc-950)20%,transparent)] dark:[--color-border:color-mix(in_oklab,var(--color-white)15%,transparent)] dark:group-hover:[--color-border:color-mix(in_oklab,var(--color-white)20%,transparent)]">
-        <div
-            aria-hidden
-            className="absolute inset-0 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-size-[24px_24px] dark:opacity-50"
-        />
-
-        <div
-            className="bg-background absolute inset-0 m-auto flex size-12 items-center justify-center border-l border-t">{children}</div>
-    </div>
-)
