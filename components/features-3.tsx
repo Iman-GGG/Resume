@@ -140,34 +140,24 @@ export default function Features() {
                 </div>
 
                 {/* Certifications */}
-                <div className="mt-20 relative rounded-2xl overflow-hidden bg-background">
-                    <Image
-                        src="/创世纪butAI.jpg"
-                        alt="背景"
-                        fill
-                        className="object-cover mix-blend-difference opacity-50"
-                    />
-                    <div className="relative py-16 px-6">
-                        <div className="text-center mb-8">
-                            <TextEffect
-                                triggerOnView
-                                preset="fade-in-blur"
-                                speedSegment={0.3}
-                                as="h2"
-                                className="text-balance text-3xl font-semibold lg:text-4xl">
-                                专业认证
-                            </TextEffect>
+                <div className="mt-20 text-center mb-8">
+                    <TextEffect
+                        triggerOnView
+                        preset="fade-in-blur"
+                        speedSegment={0.3}
+                        as="h2"
+                        className="text-balance text-3xl font-semibold lg:text-4xl">
+                        专业认证
+                    </TextEffect>
+                </div>
+                <div className="flex flex-wrap justify-center gap-4">
+                    {certs.map((cert) => (
+                        <div key={cert.name}
+                            className="inline-flex items-center gap-2 rounded-xl border border-border bg-card/50 backdrop-blur-sm px-6 py-4">
+                            <span className="text-2xl">{cert.icon}</span>
+                            <span className="font-medium">{cert.name}</span>
                         </div>
-                        <div className="flex flex-wrap justify-center gap-4">
-                            {certs.map((cert) => (
-                                <div key={cert.name}
-                                    className="inline-flex items-center gap-2 rounded-xl border border-border bg-card/80 backdrop-blur-sm px-6 py-4">
-                                    <span className="text-2xl">{cert.icon}</span>
-                                    <span className="font-medium">{cert.name}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </div>
         </section>
