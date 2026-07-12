@@ -133,6 +133,13 @@ const CardTemplate = forwardRef<CardTemplateRef, CardTemplateProps>(
       }
     }, [wechatQr]);
 
+    // Re-capture texture when QR or base image finishes loading
+    useEffect(() => {
+      if (baseImage) {
+        captureTexture();
+      }
+    }, [qrImage, baseImage]);
+
     const captureTexture = async () => {
       const canvas = document.createElement("canvas");
       canvas.width = CANVAS_SIZE;
