@@ -64,7 +64,7 @@ export default function Agenda() {
                             }}
                             className="divide-y divide-dashed sm:mx-auto sm:max-w-lg lg:mx-0"
                         >
-                            {experiences.map((exp) => (
+                                                    {experiences.map((exp, i) => (
                                 <div key={exp.product} className="py-6">
                                     <div className="rounded-xl bg-white/70 backdrop-blur-md border border-white/50 p-5 text-black">
                                         <div className="flex items-baseline justify-between gap-4 mb-3">
@@ -81,6 +81,14 @@ export default function Agenda() {
                                             ))}
                                         </ul>
                                     </div>
+                                    {i < experiences.length - 1 && (
+                                        <div className="flex justify-center py-2">
+                                            <svg width="24" height="32" viewBox="0 0 24 32" className="text-white/40">
+                                                <line x1="12" y1="0" x2="12" y2="28" stroke="currentColor" strokeWidth="1.5" />
+                                                <polyline points="6,22 12,28 18,22" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                                            </svg>
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </AnimatedGroup>
