@@ -30,3 +30,6 @@ preview.html
 *.tsbuildinfo
 next-env.d.ts
 .idea/
+
+# macOS
+.DS_Store
