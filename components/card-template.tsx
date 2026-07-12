@@ -25,25 +25,8 @@ const CANVAS_SIZE = 1376;
 function drawCardBg(ctx: CanvasRenderingContext2D, variant: CardVariant) {
   const isDark = variant === "dark";
   const bg = isDark ? "#111111" : "#fafafa";
-  const accent = isDark ? "#222222" : "#eeeeee";
-
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-
-  // Subtle geometric pattern
-  ctx.strokeStyle = accent;
-  ctx.lineWidth = 1;
-  for (let i = -CANVAS_SIZE; i < CANVAS_SIZE * 2; i += 80) {
-    ctx.beginPath();
-    ctx.moveTo(i, 0);
-    ctx.lineTo(i - CANVAS_SIZE, CANVAS_SIZE);
-    ctx.stroke();
-  }
-
-  // Top accent band
-  ctx.fillStyle = accent;
-  ctx.fillRect(0, 0, CANVAS_SIZE, 60);
-  ctx.fillRect(0, CANVAS_SIZE - 60, CANVAS_SIZE, 60);
 }
 
 function drawCard(
@@ -61,30 +44,31 @@ function drawCard(
 
   drawCardBg(ctx, variant);
 
-  const cx = CANVAS_SIZE / 2;
+  // The 3D model's visible area is centered around this x anchor
+  const vx = CANVAS_SIZE / 2 - 55; // 633
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
   if (side === "front") {
-    // --- Front: name + contacts centered ---
-    let y = CANVAS_SIZE / 2 - 40;
+    // --- Front: name + contacts ---
+    let y = 588;
     ctx.fillStyle = textColor;
     ctx.font = '600 56px "Geist Mono", monospace';
-    ctx.fillText(userName.toUpperCase() || "IMAN GENG", cx, y);
+    ctx.fillText(userName.toUpperCase() || "IMAN GENG", vx, y);
     y += 80;
 
     ctx.fillStyle = variant === "dark" ? "#aaaaaa" : "#666666";
     ctx.font = 'normal 34px "Geist Mono", monospace';
-    if (email) { ctx.fillText(email, cx, y); y += 52; }
-    if (phone) { ctx.fillText(phone, cx, y); y += 52; }
+    if (email) { ctx.fillText(email, vx, y); y += 52; }
+    if (phone) { ctx.fillText(phone, vx, y); y += 52; }
   } else {
-    // --- Back: QR code centered ---
-    const qrSize = 520;
-    const qrX = cx - qrSize / 2;
-    const qrY = 360;
+    // --- Back: QR code ---
+    const qrSize = 480;
+    const qrX = vx - qrSize / 2;
+    const qrY = 340;
     if (qrImage) {
       ctx.fillStyle = "#ffffff";
-      const pad = 20;
+      const pad = 16;
       ctx.fillRect(qrX - pad, qrY - pad, qrSize + pad * 2, qrSize + pad * 2);
       ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
     }
@@ -92,13 +76,13 @@ function drawCard(
     let y = qrY + qrSize + 40;
     ctx.fillStyle = textColor;
     ctx.font = 'normal 34px "Geist Mono", monospace';
-    ctx.fillText("微信扫码联系", cx, y);
+    ctx.fillText("微信扫码联系", vx, y);
     y += 52;
 
     ctx.fillStyle = variant === "dark" ? "#aaaaaa" : "#666666";
     ctx.font = 'normal 30px "Geist Mono", monospace';
-    if (email) { ctx.fillText(email, cx, y); y += 44; }
-    if (phone) { ctx.fillText(phone, cx, y); y += 44; }
+    if (email) { ctx.fillText(email, vx, y); y += 44; }
+    if (phone) { ctx.fillText(phone, vx, y); y += 44; }
   }
 }
 
