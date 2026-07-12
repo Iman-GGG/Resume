@@ -14,6 +14,7 @@ interface CardTemplateProps {
   phone?: string;
   github?: string;
   wechatQr?: string;
+  frontPhotoUrl?: string;
 }
 
 export interface CardTemplateRef {
@@ -38,6 +39,7 @@ function drawCard(
   userName: string,
   email?: string,
   phone?: string,
+  frontPhoto?: HTMLImageElement | null,
 ) {
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
@@ -56,16 +58,26 @@ function drawCard(
   ctx.textBaseline = "middle";
 
   if (side === "front") {
-    let y = frontCy - 30;
+    // Draw front photo centered
+    let textStartY = frontCy;
+    if (frontPhoto) {
+      const imgW = 240;
+      const imgH = imgW * (frontPhoto.naturalHeight / frontPhoto.naturalWidth);
+      const imgX = frontCx - imgW / 2;
+      const imgY = frontCy - imgH / 2 - 60;
+      ctx.drawImage(frontPhoto, imgX, imgY, imgW, imgH);
+      textStartY = imgY + imgH + 40;
+    }
+
     ctx.fillStyle = textColor;
-    ctx.font = '600 46px "Geist Mono", monospace';
-    ctx.fillText(userName.toUpperCase() || "IMAN GENG", frontCx, y);
-    y += 70;
+    ctx.font = '600 92px "Geist Mono", monospace';
+    ctx.fillText(userName.toUpperCase() || "IMAN GENG", frontCx, textStartY);
+    textStartY += 100;
 
     ctx.fillStyle = variant === "dark" ? "#aaaaaa" : "#666666";
-    ctx.font = 'normal 28px "Geist Mono", monospace';
-    if (email) { ctx.fillText(email, frontCx, y); y += 44; }
-    if (phone) { ctx.fillText(phone, frontCx, y); y += 44; }
+    ctx.font = 'normal 56px "Geist Mono", monospace';
+    if (email) { ctx.fillText(email, frontCx, textStartY); textStartY += 72; }
+    if (phone) { ctx.fillText(phone, frontCx, textStartY); textStartY += 72; }
   } else {
     const qrSize = 340;
     const qrX = backCx - qrSize / 2;
@@ -91,8 +103,9 @@ function drawCard(
 }
 
 const CardTemplate = forwardRef<CardTemplateRef, CardTemplateProps>(
-  ({ userName, variant, side, onTextureReady, email, phone, github, wechatQr }, ref) => {
+  ({ userName, variant, side, onTextureReady, email, phone, github, wechatQr, frontPhotoUrl }, ref) => {
     const [qrImage, setQrImage] = useState<HTMLImageElement | null>(null);
+    const [frontPhoto, setFrontPhoto] = useState<HTMLImageElement | null>(null);
 
     const textColor = variant === "dark" ? "#ffffff" : "#000000";
 
@@ -107,18 +120,31 @@ const CardTemplate = forwardRef<CardTemplateRef, CardTemplateProps>(
       }
     }, [wechatQr]);
 
-    // Capture when QR loads
     useEffect(() => {
-      if (qrImage || side === "front") {
+      if (frontPhotoUrl) {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => setFrontPhoto(img);
+        img.src = frontPhotoUrl;
+      } else {
+        setFrontPhoto(null);
+      }
+    }, [frontPhotoUrl]);
+
+    // Capture when images load
+    useEffect(() => {
+      const frontReady = side === "front" && (frontPhotoUrl ? frontPhoto : true);
+      const backReady = side === "back" && qrImage;
+      if (frontReady || backReady) {
         captureTexture();
       }
-    }, [qrImage]);
+    }, [qrImage, frontPhoto]);
 
     const captureTexture = async () => {
       const canvas = document.createElement("canvas");
       canvas.width = CANVAS_SIZE;
       canvas.height = CANVAS_SIZE;
-      drawCard(canvas, qrImage, textColor, variant, side, userName, email, phone);
+      drawCard(canvas, qrImage, textColor, variant, side, userName, email, phone, frontPhoto);
       const dataUrl = canvas.toDataURL("image/png");
       onTextureReady(dataUrl);
     };
