@@ -27,6 +27,7 @@ interface LanyardProps {
     transparent?: boolean;
     containerClassName?: string;
     cardTextureUrl?: string;
+    backTextureUrl?: string;
     canvasRef?: React.RefObject<HTMLCanvasElement | null>;
 }
 
@@ -37,6 +38,7 @@ export default function Lanyard({
                                     transparent = true,
                                     containerClassName,
                                     cardTextureUrl,
+                                    backTextureUrl,
                                     canvasRef
                                 }: LanyardProps) {
     const [isMobile, setIsMobile] = useState<boolean>(() => typeof window !== 'undefined' && window.innerWidth < 768);
@@ -59,7 +61,7 @@ export default function Lanyard({
             >
                 <ambientLight intensity={Math.PI}/>
                 <Physics gravity={gravity} timeStep={isMobile ? 1 / 30 : 1 / 60}>
-                    <Band isMobile={isMobile} cardTextureUrl={cardTextureUrl}/>
+                    <Band isMobile={isMobile} cardTextureUrl={cardTextureUrl} backTextureUrl={backTextureUrl}/>
                 </Physics>
                 <Environment blur={0.75}>
                     <Lightformer
@@ -101,11 +103,12 @@ interface BandProps {
     minSpeed?: number;
     isMobile?: boolean;
     cardTextureUrl?: string;
+    backTextureUrl?: string;
 }
 
 const FLIP_SPEED = 8;
 
-function Band({maxSpeed = 50, minSpeed = 0, isMobile = false, cardTextureUrl}: BandProps) {
+function Band({maxSpeed = 50, minSpeed = 0, isMobile = false, cardTextureUrl, backTextureUrl}: BandProps) {
     const band = useRef<any>(null);
     const fixed = useRef<any>(null);
     const j1 = useRef<any>(null);
@@ -171,19 +174,22 @@ function Band({maxSpeed = 50, minSpeed = 0, isMobile = false, cardTextureUrl}: B
         return () => { frontTexture?.dispose(); };
     }, [cardTextureUrl]);
 
-    // Back texture (photo)
+    // Back texture (generated card back)
     const [backTexture, setBackTexture] = useState<THREE.Texture | null>(null);
     useEffect(() => {
+        if (!backTextureUrl) { setBackTexture(null); return; }
         const loader = new THREE.TextureLoader();
-        loader.load('/头像', (t) => {
+        loader.load(backTextureUrl, (t) => {
             t.flipY = false;
             t.colorSpace = THREE.SRGBColorSpace;
             setBackTexture(t);
         });
         return () => { backTexture?.dispose(); };
-    }, []);
+    }, [backTextureUrl]);
 
-    const activeTexture = textureToShow === 'front' ? (frontTexture || materials.base.map) : (backTexture || frontTexture || materials.base.map);
+    const activeTexture = textureToShow === 'front'
+        ? (frontTexture || materials.base.map)
+        : (backTexture || materials.base.map);
 
     const [curve] = useState(
         () => new THREE.CatmullRomCurve3([new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()])

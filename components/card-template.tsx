@@ -3,39 +3,37 @@
 import { forwardRef, useImperativeHandle, useEffect, useState } from "react";
 
 export type CardVariant = "dark" | "light";
+export type CardSide = "front" | "back";
 
 interface CardTemplateProps {
   userName: string;
   variant: CardVariant;
+  side: CardSide;
   onTextureReady: (dataUrl: string) => void;
-  city?: string;
-  date?: string;
   email?: string;
   phone?: string;
   github?: string;
   wechatQr?: string;
+  photoUrl?: string;
 }
 
 export interface CardTemplateRef {
   captureTexture: () => Promise<void>;
-  exportCard: () => void;
 }
 
 const CANVAS_SIZE = 1376;
 
-// Draw common elements (background, name, city, date, contacts, qr) on a given canvas
 function drawCard(
   canvas: HTMLCanvasElement,
   baseImage: HTMLImageElement | null,
   qrImage: HTMLImageElement | null,
+  photoImage: HTMLImageElement | null,
   textColor: string,
+  side: CardSide,
   userName: string,
-  city?: string,
-  date?: string,
   email?: string,
   phone?: string,
   github?: string,
-  wechatQr?: string,
 ) {
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
@@ -48,72 +46,69 @@ function drawCard(
     ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
   }
 
-  // Name
-  const displayName = userName || "YOUR NAME";
-  const textX = (CANVAS_SIZE / 2) - 55;
-  ctx.fillStyle = textColor;
-  ctx.font = 'normal 48px "Geist Mono", monospace';
-  ctx.textAlign = "right";
+  const cx = CANVAS_SIZE / 2;
+  ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.fillText(displayName.toUpperCase(), textX, CANVAS_SIZE - 400);
 
-  // City
-  if (city) {
+  if (side === "front") {
+    // --- Front: QR code centered ---
+    if (qrImage) {
+      const qrSize = 480;
+      const qrX = cx - qrSize / 2;
+      const qrY = 360;
+      // White bg for scannability
+      ctx.fillStyle = "#ffffff";
+      const padding = 16;
+      ctx.fillRect(qrX - padding, qrY - padding, qrSize + padding * 2, qrSize + padding * 2);
+      ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
+    }
+
+    // Labels below QR
+    let y = 900;
     ctx.fillStyle = textColor;
-    ctx.font = 'normal 48px "Geist Mono", monospace';
-    ctx.textAlign = "right";
-    ctx.fillText(city.toUpperCase(), textX, CANVAS_SIZE - 1226);
-  }
+    ctx.font = 'normal 32px "Geist Mono", monospace';
+    ctx.fillText("微信二维码", cx, y);
+    y += 50;
 
-  // Date
-  if (date) {
-    ctx.fillStyle = '#878787';
-    ctx.font = 'normal 48px "Geist Mono", monospace';
-    ctx.textAlign = "right";
-    ctx.fillText(date.toUpperCase(), textX, CANVAS_SIZE - 1170);
-  }
-
-  // Contact info text (right side)
-  let contactY = CANVAS_SIZE - 600;
-  const renderContactLine = (value: string) => {
     ctx.fillStyle = '#878787';
     ctx.font = 'normal 28px "Geist Mono", monospace';
-    ctx.textAlign = "right";
-    ctx.textBaseline = "middle";
-    ctx.fillText(value, textX, contactY);
-    contactY += 36;
-  };
+    if (email) { ctx.fillText(email, cx, y); y += 40; }
+    if (phone) { ctx.fillText(phone, cx, y); y += 40; }
+  } else {
+    // --- Back: photo centered ---
+    if (photoImage) {
+      const photoSize = 500;
+      const photoX = cx - photoSize / 2;
+      const photoY = 280;
+      // White border
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(photoX - 6, photoY - 6, photoSize + 12, photoSize + 12);
+      ctx.drawImage(photoImage, photoX, photoY, photoSize, photoSize);
+    }
 
-  if (email) renderContactLine(email);
-  if (phone) renderContactLine(phone);
-  if (github) renderContactLine(`github.com/${github}`);
-
-  // WeChat QR code (left side)
-  if (wechatQr && qrImage) {
-    const qrSize = 200;
-    const qrX = 180;
-    const qrY = CANVAS_SIZE - 660;
-    // White background for QR code to ensure scannability
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(qrX - 8, qrY - 8, qrSize + 16, qrSize + 16);
-    ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
-    // Label below QR
+    // Name + contacts below photo
+    let y = 840;
     ctx.fillStyle = textColor;
-    ctx.font = 'normal 22px "Geist Mono", monospace';
-    ctx.textAlign = "center";
-    ctx.fillText("WeChat", qrX + qrSize / 2, qrY + qrSize + 30);
+    ctx.font = 'normal 40px "Geist Mono", monospace';
+    ctx.fillText(userName.toUpperCase() || "IMAN GENG", cx, y);
+    y += 56;
+
+    ctx.fillStyle = '#878787';
+    ctx.font = 'normal 28px "Geist Mono", monospace';
+    if (email) { ctx.fillText(email, cx, y); y += 40; }
+    if (phone) { ctx.fillText(phone, cx, y); y += 40; }
   }
 }
 
 const CardTemplate = forwardRef<CardTemplateRef, CardTemplateProps>(
-  ({ userName, variant, onTextureReady, city, date, email, phone, github, wechatQr }, ref) => {
+  ({ userName, variant, side, onTextureReady, email, phone, github, wechatQr, photoUrl }, ref) => {
     const [baseImage, setBaseImage] = useState<HTMLImageElement | null>(null);
     const [qrImage, setQrImage] = useState<HTMLImageElement | null>(null);
+    const [photoImage, setPhotoImage] = useState<HTMLImageElement | null>(null);
 
     const imageSrc = variant === "dark" ? "/card-base-dark.png" : "/card-base-light.png";
     const textColor = variant === "dark" ? "#ffffff" : "#000000";
 
-    // Preload the base card image
     useEffect(() => {
       const img = new Image();
       img.crossOrigin = "anonymous";
@@ -121,7 +116,6 @@ const CardTemplate = forwardRef<CardTemplateRef, CardTemplateProps>(
       img.src = imageSrc;
     }, [imageSrc]);
 
-    // Preload QR code image
     useEffect(() => {
       if (wechatQr) {
         const img = new Image();
@@ -133,48 +127,35 @@ const CardTemplate = forwardRef<CardTemplateRef, CardTemplateProps>(
       }
     }, [wechatQr]);
 
-    // Re-capture texture when QR or base image finishes loading
+    useEffect(() => {
+      if (photoUrl) {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => setPhotoImage(img);
+        img.src = photoUrl;
+      } else {
+        setPhotoImage(null);
+      }
+    }, [photoUrl]);
+
+    // Re-capture when images load
     useEffect(() => {
       if (baseImage) {
         captureTexture();
       }
-    }, [qrImage, baseImage]);
+    }, [qrImage, photoImage, baseImage]);
 
     const captureTexture = async () => {
       const canvas = document.createElement("canvas");
       canvas.width = CANVAS_SIZE;
       canvas.height = CANVAS_SIZE;
-      drawCard(canvas, baseImage, qrImage, textColor, userName, city, date, email, phone, github, wechatQr);
+      drawCard(canvas, baseImage, qrImage, photoImage, textColor, side, userName, email, phone, github);
       const dataUrl = canvas.toDataURL("image/png");
       onTextureReady(dataUrl);
     };
 
-    const exportCard = () => {
-      const CROP_BOTTOM = 334;
-      const EXPORT_HEIGHT = CANVAS_SIZE - CROP_BOTTOM;
-
-      const fullCanvas = document.createElement("canvas");
-      fullCanvas.width = CANVAS_SIZE;
-      fullCanvas.height = CANVAS_SIZE;
-      drawCard(fullCanvas, baseImage, qrImage, textColor, userName, city, date, email, phone, github, wechatQr);
-
-      const exportCanvas = document.createElement("canvas");
-      exportCanvas.width = CANVAS_SIZE;
-      exportCanvas.height = EXPORT_HEIGHT;
-      const exportCtx = exportCanvas.getContext("2d");
-      if (!exportCtx) return;
-      exportCtx.drawImage(fullCanvas, 0, 0, CANVAS_SIZE, EXPORT_HEIGHT, 0, 0, CANVAS_SIZE, EXPORT_HEIGHT);
-
-      const dataUrl = exportCanvas.toDataURL("image/png", 1.0);
-      const link = document.createElement("a");
-      link.download = `iman-geng-${userName || "card"}.png`;
-      link.href = dataUrl;
-      link.click();
-    };
-
     useImperativeHandle(ref, () => ({
       captureTexture,
-      exportCard,
     }));
 
     return null;
