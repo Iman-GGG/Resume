@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 'use client';
-import {useEffect, useRef, useState, useMemo} from 'react';
+import {useEffect, useRef, useState, useMemo, useCallback} from 'react';
 import {Canvas, extend, useFrame} from '@react-three/fiber';
 import {useGLTF, Environment, Lightformer} from '@react-three/drei';
 import {
@@ -103,14 +103,20 @@ interface BandProps {
     cardTextureUrl?: string;
 }
 
+const FLIP_SPEED = 8;
+
 function Band({maxSpeed = 50, minSpeed = 0, isMobile = false, cardTextureUrl}: BandProps) {
-    // Using "any" for refs since the exact types depend on Rapier's internals
     const band = useRef<any>(null);
     const fixed = useRef<any>(null);
     const j1 = useRef<any>(null);
     const j2 = useRef<any>(null);
     const j3 = useRef<any>(null);
     const card = useRef<any>(null);
+    const flipGroup = useRef<THREE.Group>(null);
+    const lastClickRef = useRef(0);
+    const flipTargetRef = useRef(0);
+    const flipAngleRef = useRef(0);
+    const [textureToShow, setTextureToShow] = useState<'front'|'back'>('front');
 
     const vec = new THREE.Vector3();
     const ang = new THREE.Vector3();
@@ -127,24 +133,20 @@ function Band({maxSpeed = 50, minSpeed = 0, isMobile = false, cardTextureUrl}: B
 
     const {nodes, materials} = useGLTF(cardGLB) as any;
 
-    // Generate band texture with IMAN branding
-    const texture = useMemo(() => {
+    const bandTexture = useMemo(() => {
         const canvas = document.createElement('canvas');
         canvas.width = 1024;
         canvas.height = 256;
         const ctx = canvas.getContext('2d');
         if (ctx) {
-            // Black strap background
             ctx.fillStyle = '#1a1a1a';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            // Thin decorative line
             ctx.strokeStyle = 'rgba(255,255,255,0.3)';
             ctx.lineWidth = 2;
             ctx.beginPath();
             ctx.moveTo(canvas.width / 2 - 200, canvas.height / 2 + 48);
             ctx.lineTo(canvas.width / 2 + 200, canvas.height / 2 + 48);
             ctx.stroke();
-            // White IMAN text
             ctx.fillStyle = '#ffffff';
             ctx.font = '600 72px "Geist Mono", monospace';
             ctx.textAlign = 'center';
@@ -155,52 +157,75 @@ function Band({maxSpeed = 50, minSpeed = 0, isMobile = false, cardTextureUrl}: B
         tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
         return tex;
     }, []);
-    
-    // Load custom card texture if provided - use state to handle async loading
-    const [customCardTexture, setCustomCardTexture] = useState<THREE.Texture | null>(null);
-    
+
+    // Front texture (generated card)
+    const [frontTexture, setFrontTexture] = useState<THREE.Texture | null>(null);
     useEffect(() => {
-        if (!cardTextureUrl) {
-            setCustomCardTexture(null);
-            return;
-        }
-        
+        if (!cardTextureUrl) { setFrontTexture(null); return; }
         const loader = new THREE.TextureLoader();
-        loader.load(cardTextureUrl, (loadedTexture) => {
-            loadedTexture.flipY = false;
-            loadedTexture.colorSpace = THREE.SRGBColorSpace;
-            setCustomCardTexture(loadedTexture);
+        loader.load(cardTextureUrl, (t) => {
+            t.flipY = false;
+            t.colorSpace = THREE.SRGBColorSpace;
+            setFrontTexture(t);
         });
-        
-        return () => {
-            if (customCardTexture) {
-                customCardTexture.dispose();
-            }
-        };
+        return () => { frontTexture?.dispose(); };
     }, [cardTextureUrl]);
+
+    // Back texture (photo)
+    const [backTexture, setBackTexture] = useState<THREE.Texture | null>(null);
+    useEffect(() => {
+        const loader = new THREE.TextureLoader();
+        loader.load('/头像', (t) => {
+            t.flipY = false;
+            t.colorSpace = THREE.SRGBColorSpace;
+            setBackTexture(t);
+        });
+        return () => { backTexture?.dispose(); };
+    }, []);
+
+    const activeTexture = textureToShow === 'front' ? (frontTexture || materials.base.map) : (backTexture || frontTexture || materials.base.map);
+
     const [curve] = useState(
-        () =>
-            new THREE.CatmullRomCurve3([new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()])
+        () => new THREE.CatmullRomCurve3([new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()])
     );
     const [dragged, drag] = useState<false | THREE.Vector3>(false);
     const [hovered, hover] = useState(false);
+    const pointerMoved = useRef(false);
 
     useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1]);
     useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1]);
     useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1]);
-    useSphericalJoint(j3, card, [
-        [0, 0, 0],
-        [0, 1.45, 0]
-    ]);
+    useSphericalJoint(j3, card, [[0, 0, 0], [0, 1.45, 0]]);
 
     useEffect(() => {
         if (hovered) {
             document.body.style.cursor = dragged ? 'grabbing' : 'grab';
-            return () => {
-                document.body.style.cursor = 'auto';
-            };
+            return () => { document.body.style.cursor = 'auto'; };
         }
     }, [hovered, dragged]);
+
+    const handlePointerDown = useCallback((e: any) => {
+        const now = Date.now();
+        pointerMoved.current = false;
+
+        // Double-click detection
+        if (now - lastClickRef.current < 350) {
+            // Flip!
+            flipTargetRef.current = flipTargetRef.current === 0 ? Math.PI : 0;
+            lastClickRef.current = 0;
+            return;
+        }
+        lastClickRef.current = now;
+
+        // Normal drag
+        e.target.setPointerCapture(e.pointerId);
+        drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())));
+    }, [drag]);
+
+    const handlePointerUp = useCallback((e: any) => {
+        e.target.releasePointerCapture(e.pointerId);
+        drag(false);
+    }, [drag]);
 
     useFrame((state, delta) => {
         if (dragged && typeof dragged !== 'boolean') {
@@ -232,6 +257,26 @@ function Band({maxSpeed = 50, minSpeed = 0, isMobile = false, cardTextureUrl}: B
             rot.copy(card.current.rotation());
             card.current.setAngvel({x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z});
         }
+
+        // Flip animation
+        const target = flipTargetRef.current;
+        const current = flipAngleRef.current;
+        const diff = target - current;
+        if (Math.abs(diff) > 0.001) {
+            const step = Math.sign(diff) * Math.min(Math.abs(diff), FLIP_SPEED * delta);
+            flipAngleRef.current = current + step;
+            if (flipGroup.current) {
+                flipGroup.current.rotation.y = flipAngleRef.current;
+            }
+            // Swap texture at halfway point
+            const halfPi = Math.PI / 2;
+            const prevSide = textureToShow;
+            const crossedHalf = (current < halfPi && current + step >= halfPi) ||
+                (current > halfPi && current + step <= halfPi);
+            if (crossedHalf) {
+                setTextureToShow(prevSide === 'front' ? 'back' : 'front');
+            }
+        }
     });
 
     curve.curveType = 'chordal';
@@ -261,25 +306,22 @@ function Band({maxSpeed = 50, minSpeed = 0, isMobile = false, cardTextureUrl}: B
                         position={[0, -1.2, -0.05]}
                         onPointerOver={() => hover(true)}
                         onPointerOut={() => hover(false)}
-                        onPointerUp={(e: any) => {
-                            e.target.releasePointerCapture(e.pointerId);
-                            drag(false);
-                        }}
-                        onPointerDown={(e: any) => {
-                            e.target.setPointerCapture(e.pointerId);
-                            drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())));
-                        }}
+                        onPointerUp={handlePointerUp}
+                        onPointerDown={handlePointerDown}
                     >
-                        <mesh geometry={nodes.card.geometry}>
-                            <meshPhysicalMaterial
-                                map={cardTextureUrl && customCardTexture ? customCardTexture : materials.base.map}
-                                map-anisotropy={16}
-                                clearcoat={isMobile ? 0 : 1}
-                                clearcoatRoughness={0.15}
-                                roughness={0.9}
-                                metalness={0.8}
-                            />
-                        </mesh>
+                        <group ref={flipGroup}>
+                            <mesh geometry={nodes.card.geometry}>
+                                <meshPhysicalMaterial
+                                    map={activeTexture}
+                                    side={THREE.DoubleSide}
+                                    map-anisotropy={16}
+                                    clearcoat={isMobile ? 0 : 1}
+                                    clearcoatRoughness={0.15}
+                                    roughness={0.9}
+                                    metalness={0.8}
+                                />
+                            </mesh>
+                        </group>
                         <mesh geometry={nodes.clip.geometry} material={materials.metal} material-roughness={0.3}/>
                         <mesh geometry={nodes.clamp.geometry} material={materials.metal}/>
                     </group>
@@ -292,7 +334,7 @@ function Band({maxSpeed = 50, minSpeed = 0, isMobile = false, cardTextureUrl}: B
                     depthTest={false}
                     resolution={isMobile ? [1000, 2000] : [1000, 1000]}
                     useMap
-                    map={texture}
+                    map={bandTexture}
                     repeat={[-4, 1]}
                     lineWidth={1}
                 />
