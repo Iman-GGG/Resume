@@ -137,12 +137,19 @@ function Band({maxSpeed = 50, minSpeed = 0, isMobile = false, cardTextureUrl}: B
             // Black strap background
             ctx.fillStyle = '#1a1a1a';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // Thin decorative line
+            ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(canvas.width / 2 - 200, canvas.height / 2 + 48);
+            ctx.lineTo(canvas.width / 2 + 200, canvas.height / 2 + 48);
+            ctx.stroke();
             // White IMAN text
             ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 80px "Geist Mono", monospace';
+            ctx.font = '600 72px "Geist Mono", monospace';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText('IMAN', canvas.width / 2, canvas.height / 2);
+            ctx.fillText('IMAN', canvas.width / 2, canvas.height / 2 - 4);
         }
         const tex = new THREE.CanvasTexture(canvas);
         tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
