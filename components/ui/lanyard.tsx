@@ -134,6 +134,10 @@ function Band({maxSpeed = 50, minSpeed = 0, isMobile = false, cardTextureUrl}: B
         canvas.height = 256;
         const ctx = canvas.getContext('2d');
         if (ctx) {
+            // Black strap background
+            ctx.fillStyle = '#1a1a1a';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // White IMAN text
             ctx.fillStyle = '#ffffff';
             ctx.font = 'bold 80px "Geist Mono", monospace';
             ctx.textAlign = 'center';
