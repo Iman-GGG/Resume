@@ -56,17 +56,19 @@ function drawCard(
   ctx.fillRect(cx - 380, 200, 760, 760);
 
   if (side === "front") {
-    // --- Front: name + contacts centered ---
-    let y = 560;
+    // --- Front: name + contacts at visible center ---
+    const fx = cx - 55; // matches original visible x anchor
+    let y = 500;
+    ctx.textAlign = "center";
     ctx.fillStyle = textColor;
     ctx.font = 'normal 52px "Geist Mono", monospace';
-    ctx.fillText(userName.toUpperCase() || "IMAN GENG", cx, y);
+    ctx.fillText(userName.toUpperCase() || "IMAN GENG", fx, y);
     y += 72;
 
     ctx.fillStyle = '#878787';
     ctx.font = 'normal 32px "Geist Mono", monospace';
-    if (email) { ctx.fillText(email, cx, y); y += 48; }
-    if (phone) { ctx.fillText(phone, cx, y); y += 48; }
+    if (email) { ctx.fillText(email, fx, y); y += 48; }
+    if (phone) { ctx.fillText(phone, fx, y); y += 48; }
   } else {
     // --- Back: QR code centered ---
     const qrSize = 500;
