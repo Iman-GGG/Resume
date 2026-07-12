@@ -81,7 +81,7 @@ export default function Agenda() {
                                     </ul>
                                 </div>
                                 {i < experiences.length - 1 && (
-                                    <div className="flex items-center justify-center shrink-0 w-10 mx-2">
+                                    <div className="flex items-center justify-center shrink-0 w-12 self-center">
                                         <svg width="28" height="24" viewBox="0 0 28 24" className="text-gray-400">
                                             <line x1="0" y1="12" x2="24" y2="12" stroke="currentColor" strokeWidth="1.5" />
                                             <polyline points="18,6 24,12 18,18" fill="none" stroke="currentColor" strokeWidth="1.5" />
