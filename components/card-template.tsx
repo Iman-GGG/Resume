@@ -65,7 +65,7 @@ function drawCard(
       const imgH = imgW * (frontPhoto.naturalHeight / frontPhoto.naturalWidth);
       const imgX = frontCx - imgW / 2;
       const imgY = frontCy - imgH / 2;
-      ctx.globalCompositeOperation = "multiply";
+      ctx.globalCompositeOperation = "exclusion";
       ctx.drawImage(frontPhoto, imgX, imgY, imgW, imgH);
       ctx.globalCompositeOperation = "source-over";
       textStartY = imgY + imgH + 50;
@@ -115,7 +115,11 @@ const CardTemplate = forwardRef<CardTemplateRef, CardTemplateProps>(
     useEffect(() => {
       if (frontPhotoUrl) {
         const img = new Image();
-        img.onload = () => setFrontPhoto(img);
+        img.onload = () => {
+          console.log('frontPhoto loaded:', frontPhotoUrl, img.naturalWidth, img.naturalHeight);
+          setFrontPhoto(img);
+        };
+        img.onerror = (e) => console.error('frontPhoto failed:', frontPhotoUrl, e);
         img.src = frontPhotoUrl;
       } else {
         setFrontPhoto(null);
