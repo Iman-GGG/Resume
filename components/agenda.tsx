@@ -30,9 +30,14 @@ const experiences = [
 
 export default function Agenda() {
     return (
-        <section id="experience">
-            {/* Work Experience */}
-            <div className="scroll-py-16 py-16 md:scroll-py-32 md:py-32">
+        <section id="experience" className="relative">
+            <Image
+                src="/创世纪butAI.jpg"
+                alt="背景"
+                fill
+                className="object-cover mix-blend-difference opacity-50"
+            />
+            <div className="relative scroll-py-16 py-16 md:scroll-py-32 md:py-32">
                 <div className="mx-auto max-w-5xl px-6">
                     <div className="grid gap-y-12 px-2 lg:grid-cols-[1fr_auto]">
                         <div className="text-center lg:text-left">
@@ -84,16 +89,6 @@ export default function Agenda() {
                         </AnimatedGroup>
                     </div>
                 </div>
-            </div>
-
-            {/* Background image below work experience */}
-            <div className="relative w-full h-96 overflow-hidden">
-                <Image
-                    src="/创世纪butAI.jpg"
-                    alt="背景"
-                    fill
-                    className="object-cover mix-blend-difference opacity-50"
-                />
             </div>
         </section>
     )
