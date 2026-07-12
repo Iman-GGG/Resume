@@ -1,8 +1,8 @@
 /* eslint-disable react/no-unknown-property */
 'use client';
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState, useMemo} from 'react';
 import {Canvas, extend, useFrame} from '@react-three/fiber';
-import {useGLTF, useTexture, Environment, Lightformer} from '@react-three/drei';
+import {useGLTF, Environment, Lightformer} from '@react-three/drei';
 import {
     BallCollider,
     CuboidCollider,
@@ -15,9 +15,6 @@ import {
 import {MeshLineGeometry, MeshLineMaterial} from 'meshline';
 import * as THREE from 'three';
 import clsx from 'clsx';
-
-// replace with your own imports, see the usage snippet for details
-import lanyard from './lanyard.png';
 
 const cardGLB = '/card.glb';
 
@@ -129,7 +126,24 @@ function Band({maxSpeed = 50, minSpeed = 0, isMobile = false, cardTextureUrl}: B
     };
 
     const {nodes, materials} = useGLTF(cardGLB) as any;
-    const texture = useTexture(typeof lanyard === 'string' ? lanyard : lanyard.src) as THREE.Texture;
+
+    // Generate band texture with IMAN branding
+    const texture = useMemo(() => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 1024;
+        canvas.height = 256;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 80px "Geist Mono", monospace';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('IMAN', canvas.width / 2, canvas.height / 2);
+        }
+        const tex = new THREE.CanvasTexture(canvas);
+        tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+        return tex;
+    }, []);
     
     // Load custom card texture if provided - use state to handle async loading
     const [customCardTexture, setCustomCardTexture] = useState<THREE.Texture | null>(null);
@@ -210,7 +224,6 @@ function Band({maxSpeed = 50, minSpeed = 0, isMobile = false, cardTextureUrl}: B
     });
 
     curve.curveType = 'chordal';
-    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 
     return (
         <>
