@@ -58,15 +58,17 @@ function drawCard(
   ctx.textBaseline = "middle";
 
   if (side === "front") {
-    // Draw front photo centered
-    let textStartY = frontCy;
+    // Draw front photo centered with multiply blend
+    let textStartY = frontCy + 40;
     if (frontPhoto) {
-      const imgW = 240;
+      const imgW = 280;
       const imgH = imgW * (frontPhoto.naturalHeight / frontPhoto.naturalWidth);
       const imgX = frontCx - imgW / 2;
-      const imgY = frontCy - imgH / 2 - 60;
+      const imgY = frontCy - imgH / 2;
+      ctx.globalCompositeOperation = "multiply";
       ctx.drawImage(frontPhoto, imgX, imgY, imgW, imgH);
-      textStartY = imgY + imgH + 40;
+      ctx.globalCompositeOperation = "source-over";
+      textStartY = imgY + imgH + 50;
     }
 
     ctx.fillStyle = textColor;
@@ -89,16 +91,6 @@ function drawCard(
       ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
     }
 
-    let y = qrY + qrSize + 32;
-    ctx.fillStyle = textColor;
-    ctx.font = 'normal 28px "Geist Mono", monospace';
-    ctx.fillText("微信扫码联系", backCx, y);
-    y += 44;
-
-    ctx.fillStyle = variant === "dark" ? "#aaaaaa" : "#666666";
-    ctx.font = 'normal 24px "Geist Mono", monospace';
-    if (email) { ctx.fillText(email, backCx, y); y += 36; }
-    if (phone) { ctx.fillText(phone, backCx, y); y += 36; }
   }
 }
 
@@ -123,7 +115,6 @@ const CardTemplate = forwardRef<CardTemplateRef, CardTemplateProps>(
     useEffect(() => {
       if (frontPhotoUrl) {
         const img = new Image();
-        img.crossOrigin = "anonymous";
         img.onload = () => setFrontPhoto(img);
         img.src = frontPhotoUrl;
       } else {
