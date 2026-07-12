@@ -48,40 +48,42 @@ export default function Agenda() {
                         <p className="text-muted-foreground text-lg">三款 BIM 建筑桌面端设计软件</p>
                     </div>
 
-                    <AnimatedGroup
-                        triggerOnView
-                        variants={{
-                            container: {
-                                visible: {
-                                    transition: {
-                                        staggerChildren: 0.1,
-                                        delayChildren: 0.5,
-                                    },
-                                },
-                            },
-                            ...transitionVariants,
-                        }}
-                        className="flex flex-col md:flex-row items-stretch justify-center gap-0"
-                    >
+                    <div className="flex flex-col md:flex-row items-stretch justify-center gap-3">
                         {experiences.map((exp, i) => (
                             <React.Fragment key={exp.product}>
-                                <div className="flex-1 max-w-80 rounded-xl bg-white border border-gray-200 p-6 text-black shadow-sm">
-                                    <div className="flex items-baseline justify-between gap-2 mb-3">
-                                        <span className="font-semibold text-lg">{exp.product}</span>
-                                        <span className="text-gray-400 font-mono text-xs shrink-0">{exp.period}</span>
+                                <AnimatedGroup
+                                    triggerOnView
+                                    variants={{
+                                        container: {
+                                            visible: {
+                                                transition: {
+                                                    staggerChildren: 0.05,
+                                                    delayChildren: 0.3 + i * 0.15,
+                                                },
+                                            },
+                                        },
+                                        ...transitionVariants,
+                                    }}
+                                    className="flex-1 max-w-80"
+                                >
+                                    <div className="rounded-xl bg-white border border-gray-200 p-6 text-black shadow-sm h-full">
+                                        <div className="flex items-baseline justify-between gap-2 mb-3">
+                                            <span className="font-semibold text-lg">{exp.product}</span>
+                                            <span className="text-gray-400 font-mono text-xs shrink-0">{exp.period}</span>
+                                        </div>
+                                        <p className="text-gray-500 text-sm mb-3">{exp.company}</p>
+                                        <ul className="space-y-1">
+                                            {exp.highlights.map((h) => (
+                                                <li key={h} className="text-sm flex items-start gap-2">
+                                                    <span className="text-gray-300 mt-1 shrink-0">▸</span>
+                                                    <span>{h}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
                                     </div>
-                                    <p className="text-gray-500 text-sm mb-3">{exp.company}</p>
-                                    <ul className="space-y-1">
-                                        {exp.highlights.map((h) => (
-                                            <li key={h} className="text-sm flex items-start gap-2">
-                                                <span className="text-gray-300 mt-1 shrink-0">▸</span>
-                                                <span>{h}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
+                                </AnimatedGroup>
                                 {i < experiences.length - 1 && (
-                                    <div className="flex items-center justify-center shrink-0 w-12 self-center">
+                                    <div className="flex items-center justify-center shrink-0 py-4 md:py-0">
                                         <svg width="28" height="24" viewBox="0 0 28 24" className="text-gray-400">
                                             <line x1="0" y1="12" x2="24" y2="12" stroke="currentColor" strokeWidth="1.5" />
                                             <polyline points="18,6 24,12 18,18" fill="none" stroke="currentColor" strokeWidth="1.5" />
@@ -90,7 +92,7 @@ export default function Agenda() {
                                 )}
                             </React.Fragment>
                         ))}
-                    </AnimatedGroup>
+                    </div>
                 </div>
             </div>
         </section>
