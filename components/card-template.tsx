@@ -14,7 +14,6 @@ interface CardTemplateProps {
   phone?: string;
   github?: string;
   wechatQr?: string;
-  photoUrl?: string;
 }
 
 export interface CardTemplateRef {
@@ -23,93 +22,91 @@ export interface CardTemplateRef {
 
 const CANVAS_SIZE = 1376;
 
+function drawCardBg(ctx: CanvasRenderingContext2D, variant: CardVariant) {
+  const isDark = variant === "dark";
+  const bg = isDark ? "#111111" : "#fafafa";
+  const accent = isDark ? "#222222" : "#eeeeee";
+
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+
+  // Subtle geometric pattern
+  ctx.strokeStyle = accent;
+  ctx.lineWidth = 1;
+  for (let i = -CANVAS_SIZE; i < CANVAS_SIZE * 2; i += 80) {
+    ctx.beginPath();
+    ctx.moveTo(i, 0);
+    ctx.lineTo(i - CANVAS_SIZE, CANVAS_SIZE);
+    ctx.stroke();
+  }
+
+  // Top accent band
+  ctx.fillStyle = accent;
+  ctx.fillRect(0, 0, CANVAS_SIZE, 60);
+  ctx.fillRect(0, CANVAS_SIZE - 60, CANVAS_SIZE, 60);
+}
+
 function drawCard(
   canvas: HTMLCanvasElement,
-  baseImage: HTMLImageElement | null,
   qrImage: HTMLImageElement | null,
-  photoImage: HTMLImageElement | null,
   textColor: string,
+  variant: CardVariant,
   side: CardSide,
   userName: string,
   email?: string,
   phone?: string,
-  github?: string,
 ) {
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
 
-  // Background
-  if (baseImage) {
-    ctx.drawImage(baseImage, 0, 0, CANVAS_SIZE, CANVAS_SIZE);
-  } else {
-    ctx.fillStyle = "#000000";
-    ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-  }
+  drawCardBg(ctx, variant);
 
   const cx = CANVAS_SIZE / 2;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
-  // Cover the V0 logo area on the base image
-  const coverColor = textColor === "#ffffff" ? "#0a0a0a" : "#f5f5f5";
-  ctx.fillStyle = coverColor;
-  ctx.fillRect(cx - 380, 200, 760, 760);
-
   if (side === "front") {
-    // --- Front: name + contacts at visible center ---
-    const fx = cx - 55; // matches original visible x anchor
-    let y = 500;
-    ctx.textAlign = "center";
+    // --- Front: name + contacts centered ---
+    let y = CANVAS_SIZE / 2 - 40;
     ctx.fillStyle = textColor;
-    ctx.font = 'normal 52px "Geist Mono", monospace';
-    ctx.fillText(userName.toUpperCase() || "IMAN GENG", fx, y);
-    y += 72;
+    ctx.font = '600 56px "Geist Mono", monospace';
+    ctx.fillText(userName.toUpperCase() || "IMAN GENG", cx, y);
+    y += 80;
 
-    ctx.fillStyle = '#878787';
-    ctx.font = 'normal 32px "Geist Mono", monospace';
-    if (email) { ctx.fillText(email, fx, y); y += 48; }
-    if (phone) { ctx.fillText(phone, fx, y); y += 48; }
+    ctx.fillStyle = variant === "dark" ? "#aaaaaa" : "#666666";
+    ctx.font = 'normal 34px "Geist Mono", monospace';
+    if (email) { ctx.fillText(email, cx, y); y += 52; }
+    if (phone) { ctx.fillText(phone, cx, y); y += 52; }
   } else {
     // --- Back: QR code centered ---
-    const qrSize = 500;
-    const qrX = cx - qrSize / 2 + qrSize * 0.75 - 3;
-    const qrY = 440 - qrSize * 0.25;
+    const qrSize = 520;
+    const qrX = cx - qrSize / 2;
+    const qrY = 360;
     if (qrImage) {
       ctx.fillStyle = "#ffffff";
-      const padding = 20;
-      ctx.fillRect(qrX - padding, qrY - padding, qrSize + padding * 2, qrSize + padding * 2);
+      const pad = 20;
+      ctx.fillRect(qrX - pad, qrY - pad, qrSize + pad * 2, qrSize + pad * 2);
       ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
     }
 
-    const textX = qrX + qrSize / 2;
-    let y = qrY + qrSize + 36;
+    let y = qrY + qrSize + 40;
     ctx.fillStyle = textColor;
-    ctx.font = 'normal 32px "Geist Mono", monospace';
-    ctx.fillText("微信二维码", textX, y);
-    y += 50;
+    ctx.font = 'normal 34px "Geist Mono", monospace';
+    ctx.fillText("微信扫码联系", cx, y);
+    y += 52;
 
-    ctx.fillStyle = '#878787';
-    ctx.font = 'normal 28px "Geist Mono", monospace';
-    if (email) { ctx.fillText(email, textX, y); y += 40; }
-    if (phone) { ctx.fillText(phone, textX, y); y += 40; }
+    ctx.fillStyle = variant === "dark" ? "#aaaaaa" : "#666666";
+    ctx.font = 'normal 30px "Geist Mono", monospace';
+    if (email) { ctx.fillText(email, cx, y); y += 44; }
+    if (phone) { ctx.fillText(phone, cx, y); y += 44; }
   }
 }
 
 const CardTemplate = forwardRef<CardTemplateRef, CardTemplateProps>(
-  ({ userName, variant, side, onTextureReady, email, phone, github, wechatQr, photoUrl }, ref) => {
-    const [baseImage, setBaseImage] = useState<HTMLImageElement | null>(null);
+  ({ userName, variant, side, onTextureReady, email, phone, github, wechatQr }, ref) => {
     const [qrImage, setQrImage] = useState<HTMLImageElement | null>(null);
-    const [photoImage, setPhotoImage] = useState<HTMLImageElement | null>(null);
 
-    const imageSrc = variant === "dark" ? "/card-base-dark.png" : "/card-base-light.png";
     const textColor = variant === "dark" ? "#ffffff" : "#000000";
-
-    useEffect(() => {
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.onload = () => setBaseImage(img);
-      img.src = imageSrc;
-    }, [imageSrc]);
 
     useEffect(() => {
       if (wechatQr) {
@@ -122,29 +119,18 @@ const CardTemplate = forwardRef<CardTemplateRef, CardTemplateProps>(
       }
     }, [wechatQr]);
 
+    // Capture when QR loads
     useEffect(() => {
-      if (photoUrl) {
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        img.onload = () => setPhotoImage(img);
-        img.src = photoUrl;
-      } else {
-        setPhotoImage(null);
-      }
-    }, [photoUrl]);
-
-    // Re-capture when images load
-    useEffect(() => {
-      if (baseImage) {
+      if (qrImage || side === "front") {
         captureTexture();
       }
-    }, [qrImage, photoImage, baseImage]);
+    }, [qrImage]);
 
     const captureTexture = async () => {
       const canvas = document.createElement("canvas");
       canvas.width = CANVAS_SIZE;
       canvas.height = CANVAS_SIZE;
-      drawCard(canvas, baseImage, qrImage, photoImage, textColor, side, userName, email, phone, github);
+      drawCard(canvas, qrImage, textColor, variant, side, userName, email, phone);
       const dataUrl = canvas.toDataURL("image/png");
       onTextureReady(dataUrl);
     };
