@@ -10,21 +10,18 @@ const experiences = [
     product: 'PKPM-BIM',
     period: '建筑专业桌面端设计软件',
     highlights: ['基础功能设计，覆盖建筑建模核心流程'],
-    color: 'from-blue-500/10 to-blue-500/5',
   },
   {
     company: '广联达',
     product: 'GNA 数维建筑',
     period: '建筑专业桌面端设计软件',
     highlights: ['指标计算专项', '出图专项'],
-    color: 'from-emerald-500/10 to-emerald-500/5',
   },
   {
     company: '万科 · 万翼',
     product: 'dougong',
     period: '建筑专业桌面端设计软件',
     highlights: ['BIM 软件通用能力全链路设计'],
-    color: 'from-purple-500/10 to-purple-500/5',
   },
 ]
 
@@ -69,16 +66,16 @@ export default function Agenda() {
                         >
                             {experiences.map((exp) => (
                                 <div key={exp.product} className="py-6">
-                                    <div className={`rounded-xl bg-gradient-to-br ${exp.color} border border-border/50 p-5`}>
+                                    <div className="rounded-xl bg-white/20 backdrop-blur-md border border-white/30 p-5 text-black">
                                         <div className="flex items-baseline justify-between gap-4 mb-3">
                                             <span className="font-semibold text-lg">{exp.product}</span>
-                                            <span className="text-muted-foreground font-mono text-xs shrink-0">{exp.period}</span>
+                                            <span className="text-black/50 font-mono text-xs shrink-0">{exp.period}</span>
                                         </div>
-                                        <p className="text-muted-foreground text-sm mb-3">{exp.company}</p>
+                                        <p className="text-black/50 text-sm mb-3">{exp.company}</p>
                                         <ul className="space-y-1">
                                             {exp.highlights.map((h) => (
                                                 <li key={h} className="text-sm flex items-start gap-2">
-                                                    <span className="text-muted-foreground mt-1">▸</span>
+                                                    <span className="text-black/30 mt-1">▸</span>
                                                     <span>{h}</span>
                                                 </li>
                                             ))}
