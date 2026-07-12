@@ -172,6 +172,48 @@ export default function Features() {
                         </div>
                     ))}
                 </div>
+
+                {/* 证书价值说明 */}
+                <div className="mt-8 mx-auto max-w-2xl rounded-xl border border-border bg-card/50 backdrop-blur-sm p-6">
+                    <h3 className="font-semibold text-lg mb-4">信息系统项目管理师 — 证书价值</h3>
+                    <ul className="space-y-3 text-sm text-muted-foreground">
+                        <li className="flex items-start gap-2">
+                            <span className="mt-1 shrink-0 size-1.5 rounded-full bg-primary" />
+                            <span>满足政企项目投标、资质办理入库硬性人员要求，能承接更多官方项目。</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                            <span className="mt-1 shrink-0 size-1.5 rounded-full bg-primary" />
+                            <span>持证等同副高职称，助力高新企业认定、项目审计验收合规。</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                            <span className="mt-1 shrink-0 size-1.5 rounded-full bg-primary" />
+                            <span>规范项目全流程管理，减少项目延期、超预算与返工损耗。</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                            <span className="mt-1 shrink-0 size-1.5 rounded-full bg-primary" />
+                            <span>可享受地方人才补贴，完善企业人才职称架构，方便内部团队管理带教。</span>
+                        </li>
+                    </ul>
+                </div>
+
+                {/* AI 智能体应用师证书价值说明 */}
+                <div className="mt-6 mx-auto max-w-2xl rounded-xl border border-border bg-card/50 backdrop-blur-sm p-6">
+                    <h3 className="font-semibold text-lg mb-4">AI 智能体应用师 — 证书价值</h3>
+                    <ul className="space-y-3 text-sm text-muted-foreground">
+                        <li className="flex items-start gap-2">
+                            <span className="mt-1.5 shrink-0 text-xs font-medium text-primary">专业能力</span>
+                            <span>持证人具备相应职业技能水平的权威依据，证明在 AI 智能体应用领域的专业能力。</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                            <span className="mt-1.5 shrink-0 text-xs font-medium text-primary">职业发展</span>
+                            <span>可作为专业技术人才职业能力考核、岗位聘用、任职、定级和晋升职务的重要参考，并在内部职级评定中作为加分项使用。</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                            <span className="mt-1.5 shrink-0 text-xs font-medium text-primary">企业资质</span>
+                            <span>在诸多城市的企业招投标、资质申请、升级及项目验收中可起到加分或辅助作用。部分招标文件明确要求"团队中持有工业和信息化部人工智能相关证书者优先"，持有高级证书可大大提升企业中标概率。</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </section>
     )
