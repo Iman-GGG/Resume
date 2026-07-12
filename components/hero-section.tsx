@@ -22,7 +22,7 @@ export default function HeroSection() {
                         <div className="mx-auto max-w-2xl text-center lg:ml-0 lg:text-left">
                             <div className='mt-8 lg:mt-16'>
                                 <DecryptedText
-                                    text="爱会流向不缺爱的人，钱会流向不缺钱的人"
+                                    text="先出发，路上缺啥补啥。"
                                     animateOn="view"
                                     revealDirection="start"
                                     sequential

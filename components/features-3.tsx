@@ -19,13 +19,13 @@ const projects = [
     tag: '公益劝烟嘴替 · 微信小程序',
     desc: '公益戒烟倡导小程序，用趣味化的方式帮助公共场所劝阻吸烟。微信直接搜索「林则鼠」即可使用。',
     link: null,
-    images: [1, 2, 3, 4, 5, 6, 7, 8],
+    images: [1, 4, 5, 6, 7, 8],
     tech: ['微信小程序', '公益'],
   },
   {
-    name: '个人简历网站',
-    tag: '3D 互动名片 · 作品集',
-    desc: '就是你现在正在看的这个网站。基于 Next.js + Three.js，带 3D 物理吊牌和可导出名片的个人作品集。',
+    name: '作品集',
+    tag: '作品集展示',
+    desc: '基于 Next.js + Three.js，带 3D 物理吊牌的个人作品集网站。',
     link: 'https://gengyiman.vercel.app',
     images: null,
     tech: ['Next.js', 'Three.js', 'Vercel'],
@@ -93,7 +93,7 @@ export default function Features() {
                                     </div>
                                 )}
                                 {project.images && project.name !== '瞎芝麻' && (
-                                    <div className="grid grid-cols-4 gap-2 p-4 bg-muted/30">
+                                    <div className="grid grid-cols-3 gap-2 p-3 bg-muted/30">
                                         {project.images.map((n) => (
                                             <Image
                                                 key={n}
