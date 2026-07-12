@@ -8,9 +8,9 @@ import { transitionVariants } from "@/lib/utils";
 import LanyardWithControls from "@/components/lanyard-with-controls";
 
 const roles = [
-  { label: '产品经理', icon: '📋' },
-  { label: '信息系统项目管理师', icon: '📐' },
-  { label: 'AI 智能体应用师', icon: '🤖' },
+  { label: '产品经理' },
+  { label: '信息系统项目管理师' },
+  { label: 'AI 智能体应用师' },
 ]
 
 export default function HeroSection() {
@@ -70,9 +70,8 @@ export default function HeroSection() {
                             >
                                 {roles.map((role) => (
                                     <span key={role.label}
-                                        className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background/50 backdrop-blur-sm px-4 py-1.5 text-sm font-medium">
-                                        <span>{role.icon}</span>
-                                        <span>{role.label}</span>
+                                        className="inline-flex items-center rounded-full border border-border bg-background/50 backdrop-blur-sm px-4 py-1.5 text-sm font-medium">
+                                        {role.label}
                                     </span>
                                 ))}
                             </AnimatedGroup>
