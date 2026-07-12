@@ -60,9 +60,32 @@ export default function Features() {
                             }}
                         >
                             <div className="rounded-2xl border border-border bg-card/50 overflow-hidden h-full flex flex-col">
-                                {/* Screenshots for 林则鼠 */}
-                                {project.images && (
-                                    <div className={`p-4 bg-muted/30 ${project.images.length <= 5 ? 'grid grid-cols-3 gap-2' : 'grid grid-cols-4 gap-2'}`}>
+                                {/* Screenshots */}
+                                {project.images && project.name === '瞎芝麻' && (
+                                    <div className="p-3 bg-muted/30 space-y-2">
+                                        <Image
+                                            src={`/${project.name}1.png`}
+                                            alt={`${project.name} 主图`}
+                                            width={800}
+                                            height={400}
+                                            className="rounded-lg w-full h-auto"
+                                        />
+                                        <div className="grid grid-cols-2 gap-2">
+                                            {project.images.filter(n => n !== 1).map((n) => (
+                                                <Image
+                                                    key={n}
+                                                    src={`/${project.name}${n}.png`}
+                                                    alt={`${project.name} 截图 ${n}`}
+                                                    width={400}
+                                                    height={200}
+                                                    className="rounded-lg w-full h-auto"
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                                {project.images && project.name !== '瞎芝麻' && (
+                                    <div className="grid grid-cols-4 gap-2 p-4 bg-muted/30">
                                         {project.images.map((n) => (
                                             <Image
                                                 key={n}
