@@ -140,14 +140,13 @@ export default function Features() {
                 </div>
 
                 {/* Certifications */}
-                <div className="mt-20 relative rounded-2xl overflow-hidden">
+                <div className="mt-20 relative rounded-2xl overflow-hidden bg-background">
                     <Image
                         src="/创世纪butAI.jpg"
                         alt="背景"
                         fill
-                        className="object-cover opacity-40 -z-10"
+                        className="object-cover mix-blend-difference opacity-50"
                     />
-                    <div className="absolute inset-0 bg-background/60 -z-10" />
                     <div className="relative py-16 px-6">
                         <div className="text-center mb-8">
                             <TextEffect
