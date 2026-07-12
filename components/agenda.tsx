@@ -3,6 +3,7 @@ import React from "react";
 import Image from "next/image";
 import {transitionVariants} from "@/lib/utils";
 import {AnimatedGroup} from "@/components/motion-primitives/animated-group";
+import { ExternalLink } from 'lucide-react';
 
 const experiences = [
   {
@@ -10,18 +11,24 @@ const experiences = [
     product: 'PKPM-BIM',
     period: '建筑专业桌面端设计软件',
     highlights: ['基础功能设计，覆盖建筑建模核心流程'],
+    image: '/pkpmbim.png',
+    link: 'https://product.pkpm.cn/productDetails?productId=28',
   },
   {
     company: '广联达',
     product: 'GNA 数维建筑',
     period: '建筑专业桌面端设计软件',
     highlights: ['指标计算专项', '出图专项'],
+    image: '/glodon.png',
+    link: 'https://www.glodon.com/product/413.html',
   },
   {
     company: '万科 · 万翼',
     product: 'dougong',
     period: '建筑专业桌面端设计软件',
     highlights: ['BIM 软件通用能力全链路设计'],
+    image: '/dougong.png',
+    link: 'https://www.dougongdesign.com',
   },
 ]
 
@@ -48,7 +55,7 @@ export default function Agenda() {
                         <p className="text-muted-foreground text-lg">三款 BIM 建筑桌面端设计软件</p>
                     </div>
 
-                    <div className="flex flex-col md:flex-row items-stretch justify-center gap-3">
+                    <div className="flex flex-col md:flex-row items-start justify-center gap-3">
                         {experiences.map((exp, i) => (
                             <React.Fragment key={exp.product}>
                                 <AnimatedGroup
@@ -64,9 +71,10 @@ export default function Agenda() {
                                         },
                                         ...transitionVariants,
                                     }}
-                                    className="flex-1 max-w-80"
+                                    className="flex-1 max-w-80 flex flex-col gap-3"
                                 >
-                                    <div className="rounded-xl bg-white border border-gray-200 p-6 text-black shadow-sm h-full">
+                                    {/* Text card */}
+                                    <div className="rounded-xl bg-white border border-gray-200 p-6 text-black shadow-sm">
                                         <div className="flex items-baseline justify-between gap-2 mb-3">
                                             <span className="font-semibold text-lg">{exp.product}</span>
                                             <span className="text-gray-400 font-mono text-xs shrink-0">{exp.period}</span>
@@ -81,9 +89,29 @@ export default function Agenda() {
                                             ))}
                                         </ul>
                                     </div>
+                                    {/* Image card */}
+                                    <div className="rounded-xl bg-white border border-gray-200 overflow-hidden shadow-sm">
+                                        <Image
+                                            src={exp.image}
+                                            alt={exp.product}
+                                            width={800}
+                                            height={450}
+                                            className="w-full h-auto object-cover"
+                                        />
+                                    </div>
+                                    {/* Link */}
+                                    <a
+                                        href={exp.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-800 transition-colors px-1"
+                                    >
+                                        <ExternalLink className="size-3" />
+                                        {exp.link.replace('https://', '').split('/')[0]}
+                                    </a>
                                 </AnimatedGroup>
                                 {i < experiences.length - 1 && (
-                                    <div className="flex items-center justify-center shrink-0 py-4 md:py-0">
+                                    <div className="flex items-center justify-center shrink-0 py-4 md:py-0 md:self-center">
                                         <svg width="28" height="24" viewBox="0 0 28 24" className="text-gray-400">
                                             <line x1="0" y1="12" x2="24" y2="12" stroke="currentColor" strokeWidth="1.5" />
                                             <polyline points="18,6 24,12 18,18" fill="none" stroke="currentColor" strokeWidth="1.5" />
