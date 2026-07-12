@@ -52,8 +52,7 @@ export default function LanyardWithControls({
     return (
       <div className="flex flex-col">
         <CardTemplate ref={frontRef} userName={defaultName} variant={defaultVariant} side="front"
-          onTextureReady={handleFrontReady} email="767189834@qq.com" phone="17815381850"
-          photoUrl="/头像" />
+          onTextureReady={handleFrontReady} email="767189834@qq.com" phone="17815381850" />
         <CardTemplate ref={backRef} userName={defaultName} variant={defaultVariant} side="back"
           onTextureReady={handleBackReady} email="767189834@qq.com" phone="17815381850"
           github="Iman-GGG" wechatQr="/wechatscan.jpg" />
