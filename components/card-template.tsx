@@ -61,10 +61,10 @@ function drawCard(
     // Draw front photo centered with multiply blend
     let textStartY = frontCy + 40;
     if (frontPhoto) {
-      const imgW = 280;
+      const imgW = 320;
       const imgH = imgW * (frontPhoto.naturalHeight / frontPhoto.naturalWidth);
       const imgX = frontCx - imgW / 2;
-      const imgY = frontCy - imgH / 2;
+      const imgY = frontCy - imgH / 2 - 20;
       ctx.globalCompositeOperation = "exclusion";
       ctx.drawImage(frontPhoto, imgX, imgY, imgW, imgH);
       ctx.globalCompositeOperation = "source-over";
