@@ -33,8 +33,8 @@ const projects = [
 ]
 
 const certs = [
-  { name: '信息系统项目管理师', icon: '📐' },
-  { name: 'AI 智能体应用师', icon: '🤖' },
+  { name: '信息系统项目管理师' },
+  { name: 'AI 智能体应用师' },
 ]
 
 export default function Features() {
@@ -153,8 +153,7 @@ export default function Features() {
                 <div className="flex flex-wrap justify-center gap-4">
                     {certs.map((cert) => (
                         <div key={cert.name}
-                            className="inline-flex items-center gap-2 rounded-xl border border-border bg-card/50 backdrop-blur-sm px-6 py-4">
-                            <span className="text-2xl">{cert.icon}</span>
+                            className="inline-flex items-center rounded-xl border border-border bg-card/50 backdrop-blur-sm px-6 py-4">
                             <span className="font-medium">{cert.name}</span>
                         </div>
                     ))}
