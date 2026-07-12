@@ -88,40 +88,6 @@ function drawCard(
     if (email) { ctx.fillText(email, backCx, y); y += 36; }
     if (phone) { ctx.fillText(phone, backCx, y); y += 36; }
   }
-
-  if (side === "front") {
-    let y = vy - 30;
-    ctx.fillStyle = textColor;
-    ctx.font = '600 48px "Geist Mono", monospace';
-    ctx.fillText(userName.toUpperCase() || "IMAN GENG", vx, y);
-    y += 72;
-
-    ctx.fillStyle = variant === "dark" ? "#aaaaaa" : "#666666";
-    ctx.font = 'normal 30px "Geist Mono", monospace';
-    if (email) { ctx.fillText(email, vx, y); y += 46; }
-    if (phone) { ctx.fillText(phone, vx, y); y += 46; }
-  } else {
-    const qrSize = 380;
-    const qrX = vx - qrSize / 2;
-    const qrY = vy - qrSize / 2 - 30;
-    if (qrImage) {
-      ctx.fillStyle = "#ffffff";
-      const pad = 16;
-      ctx.fillRect(qrX - pad, qrY - pad, qrSize + pad * 2, qrSize + pad * 2);
-      ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
-    }
-
-    let y = qrY + qrSize + 36;
-    ctx.fillStyle = textColor;
-    ctx.font = 'normal 30px "Geist Mono", monospace';
-    ctx.fillText("微信扫码联系", vx, y);
-    y += 48;
-
-    ctx.fillStyle = variant === "dark" ? "#aaaaaa" : "#666666";
-    ctx.font = 'normal 26px "Geist Mono", monospace';
-    if (email) { ctx.fillText(email, vx, y); y += 40; }
-    if (phone) { ctx.fillText(phone, vx, y); y += 40; }
-  }
 }
 
 const CardTemplate = forwardRef<CardTemplateRef, CardTemplateProps>(
