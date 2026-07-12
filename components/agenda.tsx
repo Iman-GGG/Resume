@@ -66,7 +66,7 @@ export default function Agenda() {
                         >
                             {experiences.map((exp) => (
                                 <div key={exp.product} className="py-6">
-                                    <div className="rounded-xl bg-white/20 backdrop-blur-md border border-white/30 p-5 text-black">
+                                    <div className="rounded-xl bg-white/70 backdrop-blur-md border border-white/50 p-5 text-black">
                                         <div className="flex items-baseline justify-between gap-4 mb-3">
                                             <span className="font-semibold text-lg">{exp.product}</span>
                                             <span className="text-black/50 font-mono text-xs shrink-0">{exp.period}</span>
