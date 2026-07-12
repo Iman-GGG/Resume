@@ -13,6 +13,7 @@ interface CardTemplateProps {
   email?: string;
   phone?: string;
   github?: string;
+  wechatQr?: string;
 }
 
 export interface CardTemplateRef {
@@ -22,9 +23,92 @@ export interface CardTemplateRef {
 
 const CANVAS_SIZE = 1376;
 
+// Draw common elements (background, name, city, date, contacts, qr) on a given canvas
+function drawCard(
+  canvas: HTMLCanvasElement,
+  baseImage: HTMLImageElement | null,
+  qrImage: HTMLImageElement | null,
+  textColor: string,
+  userName: string,
+  city?: string,
+  date?: string,
+  email?: string,
+  phone?: string,
+  github?: string,
+  wechatQr?: string,
+) {
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  // Background
+  if (baseImage) {
+    ctx.drawImage(baseImage, 0, 0, CANVAS_SIZE, CANVAS_SIZE);
+  } else {
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+  }
+
+  // Name
+  const displayName = userName || "YOUR NAME";
+  const textX = (CANVAS_SIZE / 2) - 55;
+  ctx.fillStyle = textColor;
+  ctx.font = 'normal 48px "Geist Mono", monospace';
+  ctx.textAlign = "right";
+  ctx.textBaseline = "middle";
+  ctx.fillText(displayName.toUpperCase(), textX, CANVAS_SIZE - 400);
+
+  // City
+  if (city) {
+    ctx.fillStyle = textColor;
+    ctx.font = 'normal 48px "Geist Mono", monospace';
+    ctx.textAlign = "right";
+    ctx.fillText(city.toUpperCase(), textX, CANVAS_SIZE - 1226);
+  }
+
+  // Date
+  if (date) {
+    ctx.fillStyle = '#878787';
+    ctx.font = 'normal 48px "Geist Mono", monospace';
+    ctx.textAlign = "right";
+    ctx.fillText(date.toUpperCase(), textX, CANVAS_SIZE - 1170);
+  }
+
+  // Contact info text (right side)
+  let contactY = CANVAS_SIZE - 600;
+  const renderContactLine = (value: string) => {
+    ctx.fillStyle = '#878787';
+    ctx.font = 'normal 28px "Geist Mono", monospace';
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+    ctx.fillText(value, textX, contactY);
+    contactY += 36;
+  };
+
+  if (email) renderContactLine(email);
+  if (phone) renderContactLine(phone);
+  if (github) renderContactLine(`github.com/${github}`);
+
+  // WeChat QR code (left side)
+  if (wechatQr && qrImage) {
+    const qrSize = 200;
+    const qrX = 180;
+    const qrY = CANVAS_SIZE - 660;
+    // White background for QR code to ensure scannability
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(qrX - 8, qrY - 8, qrSize + 16, qrSize + 16);
+    ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
+    // Label below QR
+    ctx.fillStyle = textColor;
+    ctx.font = 'normal 22px "Geist Mono", monospace';
+    ctx.textAlign = "center";
+    ctx.fillText("WeChat", qrX + qrSize / 2, qrY + qrSize + 30);
+  }
+}
+
 const CardTemplate = forwardRef<CardTemplateRef, CardTemplateProps>(
-  ({ userName, variant, onTextureReady, city, date, email, phone, github }, ref) => {
+  ({ userName, variant, onTextureReady, city, date, email, phone, github, wechatQr }, ref) => {
     const [baseImage, setBaseImage] = useState<HTMLImageElement | null>(null);
+    const [qrImage, setQrImage] = useState<HTMLImageElement | null>(null);
 
     const imageSrc = variant === "dark" ? "/card-base-dark.png" : "/card-base-light.png";
     const textColor = variant === "dark" ? "#ffffff" : "#000000";
@@ -37,87 +121,23 @@ const CardTemplate = forwardRef<CardTemplateRef, CardTemplateProps>(
       img.src = imageSrc;
     }, [imageSrc]);
 
+    // Preload QR code image
+    useEffect(() => {
+      if (wechatQr) {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => setQrImage(img);
+        img.src = wechatQr;
+      } else {
+        setQrImage(null);
+      }
+    }, [wechatQr]);
+
     const captureTexture = async () => {
       const canvas = document.createElement("canvas");
       canvas.width = CANVAS_SIZE;
       canvas.height = CANVAS_SIZE;
-      const ctx = canvas.getContext("2d");
-      
-      if (!ctx) return;
-
-      // Draw base card image (fills entire canvas)
-      if (baseImage) {
-        ctx.drawImage(baseImage, 0, 0, CANVAS_SIZE, CANVAS_SIZE);
-      } else {
-        // Fallback black background if image not loaded
-        ctx.fillStyle = "#000000";
-        ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-      }
-
-      // Draw user name at the bottom left area (below the geometric pattern)
-      const displayName = userName || "YOUR NAME";
-      ctx.fillStyle = textColor;
-      ctx.font = 'normal 48px "Geist Mono", monospace';
-      ctx.textAlign = "right";
-      ctx.textBaseline = "middle";
-      
-      const textX = (CANVAS_SIZE / 2) - 55;
-      const textY = CANVAS_SIZE - 400;
-      ctx.fillText(displayName.toUpperCase(), textX, textY);
-
-      // Render city label
-      if (city) {
-        const cityRender = canvas.getContext("2d");
-
-        if (!cityRender) return;
-
-        cityRender.fillStyle = textColor;
-        cityRender.font = 'normal 48px "Geist Mono", monospace';
-        cityRender.textAlign = "right";
-        cityRender.textBaseline = "middle";
-
-        const cityTextX = (CANVAS_SIZE / 2) - 55;
-        const cityTextY = CANVAS_SIZE - 1226;
-        cityRender.fillText(city.toUpperCase(), cityTextX, cityTextY);
-      }
-
-      // Render date label
-      if (date) {
-        const dateRender = canvas.getContext("2d");
-
-        if (!dateRender) return;
-
-        dateRender.fillStyle = '#878787';
-        dateRender.font = 'normal 48px "Geist Mono", monospace';
-        dateRender.textAlign = "right";
-        dateRender.textBaseline = "middle";
-
-        const dateTextX = (CANVAS_SIZE / 2) - 55;
-        const dateTextY = CANVAS_SIZE - 1170;
-        dateRender.fillText(date.toUpperCase(), dateTextX, dateTextY);
-      }
-
-      // Render contact info (email, phone, github) on the card
-      let contactY = CANVAS_SIZE - 600;
-      const contactX = (CANVAS_SIZE / 2) - 55;
-      const contactFontSize = 28;
-
-      const renderContactLine = (label: string, value: string) => {
-        const ctx2 = canvas.getContext("2d");
-        if (!ctx2) return;
-        ctx2.fillStyle = '#878787';
-        ctx2.font = `normal ${contactFontSize}px "Geist Mono", monospace`;
-        ctx2.textAlign = "right";
-        ctx2.textBaseline = "middle";
-        ctx2.fillText(value, contactX, contactY);
-        contactY += 36;
-      };
-
-      if (email) renderContactLine('', email);
-      if (phone) renderContactLine('', phone);
-      if (github) renderContactLine('', `github.com/${github}`);
-
-
+      drawCard(canvas, baseImage, qrImage, textColor, userName, city, date, email, phone, github, wechatQr);
       const dataUrl = canvas.toDataURL("image/png");
       onTextureReady(dataUrl);
     };
@@ -126,102 +146,18 @@ const CardTemplate = forwardRef<CardTemplateRef, CardTemplateProps>(
       const CROP_BOTTOM = 334;
       const EXPORT_HEIGHT = CANVAS_SIZE - CROP_BOTTOM;
 
-      // First, create a full-size canvas to draw the complete card
       const fullCanvas = document.createElement("canvas");
       fullCanvas.width = CANVAS_SIZE;
       fullCanvas.height = CANVAS_SIZE;
-      const fullCtx = fullCanvas.getContext("2d");
-      
-      if (!fullCtx) return;
+      drawCard(fullCanvas, baseImage, qrImage, textColor, userName, city, date, email, phone, github, wechatQr);
 
-      // Draw base card image (fills entire canvas)
-      if (baseImage) {
-        fullCtx.drawImage(baseImage, 0, 0, CANVAS_SIZE, CANVAS_SIZE);
-      } else {
-        // Fallback black background if image not loaded
-        fullCtx.fillStyle = "#000000";
-        fullCtx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-      }
-
-      // Draw user name at the bottom left area (below the geometric pattern)
-      const displayName = userName || "YOUR NAME";
-      fullCtx.fillStyle = textColor;
-      fullCtx.font = 'normal 48px "Geist Mono", monospace';
-      fullCtx.textAlign = "right";
-      fullCtx.textBaseline = "middle";
-      
-      const textX = (CANVAS_SIZE / 2) - 55;
-      const textY = CANVAS_SIZE - 400;
-      fullCtx.fillText(displayName.toUpperCase(), textX, textY);
-
-      // Render city label
-      if (city) {
-        const cityRender = fullCanvas.getContext("2d");
-
-        if (!cityRender) return;
-
-        cityRender.fillStyle = textColor;
-        cityRender.font = 'normal 48px "Geist Mono", monospace';
-        cityRender.textAlign = "right";
-        cityRender.textBaseline = "middle";
-
-        const cityTextX = (CANVAS_SIZE / 2) - 55;
-        const cityTextY = CANVAS_SIZE - 1226;
-        cityRender.fillText(city.toUpperCase(), cityTextX, cityTextY);
-      }
-
-      // Render date label
-      if (date) {
-        const dateRender = fullCanvas.getContext("2d");
-
-        if (!dateRender) return;
-
-        dateRender.fillStyle = '#878787';
-        dateRender.font = 'normal 48px "Geist Mono", monospace';
-        dateRender.textAlign = "right";
-        dateRender.textBaseline = "middle";
-
-        const dateTextX = (CANVAS_SIZE / 2) - 55;
-        const dateTextY = CANVAS_SIZE - 1170;
-        dateRender.fillText(date.toUpperCase(), dateTextX, dateTextY);
-      }
-
-      // Render contact info on export card
-      let exportContactY = CANVAS_SIZE - 600;
-      const exportContactX = (CANVAS_SIZE / 2) - 55;
-      const exportFontSize = 28;
-
-      const renderExportContact = (value: string) => {
-        const ctx2 = fullCanvas.getContext("2d");
-        if (!ctx2) return;
-        ctx2.fillStyle = '#878787';
-        ctx2.font = `normal ${exportFontSize}px "Geist Mono", monospace`;
-        ctx2.textAlign = "right";
-        ctx2.textBaseline = "middle";
-        ctx2.fillText(value, exportContactX, exportContactY);
-        exportContactY += 36;
-      };
-
-      if (email) renderExportContact(email);
-      if (phone) renderExportContact(phone);
-      if (github) renderExportContact(`github.com/${github}`);
-
-      // Create cropped export canvas (excludes bottom 334px)
       const exportCanvas = document.createElement("canvas");
       exportCanvas.width = CANVAS_SIZE;
       exportCanvas.height = EXPORT_HEIGHT;
       const exportCtx = exportCanvas.getContext("2d");
-
       if (!exportCtx) return;
+      exportCtx.drawImage(fullCanvas, 0, 0, CANVAS_SIZE, EXPORT_HEIGHT, 0, 0, CANVAS_SIZE, EXPORT_HEIGHT);
 
-      // Copy the top portion of the full canvas to the export canvas
-      exportCtx.drawImage(
-        fullCanvas,
-        0, 0, CANVAS_SIZE, EXPORT_HEIGHT, // Source: top portion
-        0, 0, CANVAS_SIZE, EXPORT_HEIGHT  // Destination: same size
-      );
-
-      // Export at full resolution
       const dataUrl = exportCanvas.toDataURL("image/png", 1.0);
       const link = document.createElement("a");
       link.download = `iman-geng-${userName || "card"}.png`;
@@ -234,7 +170,6 @@ const CardTemplate = forwardRef<CardTemplateRef, CardTemplateProps>(
       exportCard,
     }));
 
-    // This component doesn't render anything visible
     return null;
   }
 );

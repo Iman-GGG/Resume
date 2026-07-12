@@ -171,6 +171,7 @@ export default function LanyardWithControls({
           email="767189834@qq.com"
           phone="17815381850"
           github="Iman-GGG"
+          wechatQr="/wechatscan.jpg"
         />
         <div className={containerClassName}>
           <div className="flex h-full items-center justify-center">
