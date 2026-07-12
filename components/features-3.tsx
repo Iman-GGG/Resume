@@ -11,7 +11,7 @@ const projects = [
     tag: '股票量化筛选平台',
     desc: '独立用 AI 开发的全栈股票量化筛选工具，覆盖选股、回测、信号监控等核心量化需求。',
     link: 'https://xiazhima.vercel.app',
-    images: null,
+    images: [1, 2, 3, 4, 5],
     tech: ['Next.js', 'Python', '量化交易'],
   },
   {
@@ -62,11 +62,11 @@ export default function Features() {
                             <div className="rounded-2xl border border-border bg-card/50 overflow-hidden h-full flex flex-col">
                                 {/* Screenshots for 林则鼠 */}
                                 {project.images && (
-                                    <div className="grid grid-cols-4 gap-2 p-4 bg-muted/30">
-                                        {project.images.slice(0, 8).map((n) => (
+                                    <div className={`p-4 bg-muted/30 ${project.images.length <= 5 ? 'grid grid-cols-3 gap-2' : 'grid grid-cols-4 gap-2'}`}>
+                                        {project.images.map((n) => (
                                             <Image
                                                 key={n}
-                                                src={`/林则鼠${n}.png`}
+                                                src={`/${project.name}${n}.png`}
                                                 alt={`${project.name} 截图 ${n}`}
                                                 width={160}
                                                 height={284}
