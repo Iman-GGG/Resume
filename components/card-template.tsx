@@ -51,47 +51,43 @@ function drawCard(
   ctx.textBaseline = "middle";
 
   if (side === "front") {
-    // --- Front: QR code centered ---
-    if (qrImage) {
-      const qrSize = 480;
-      const qrX = cx - qrSize / 2;
-      const qrY = 360;
-      // White bg for scannability
+    // --- Front: photo centered ---
+    if (photoImage) {
+      const photoSize = 500;
+      const photoX = cx - photoSize / 2;
+      const photoY = 280;
       ctx.fillStyle = "#ffffff";
-      const padding = 16;
-      ctx.fillRect(qrX - padding, qrY - padding, qrSize + padding * 2, qrSize + padding * 2);
-      ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
+      ctx.fillRect(photoX - 6, photoY - 6, photoSize + 12, photoSize + 12);
+      ctx.drawImage(photoImage, photoX, photoY, photoSize, photoSize);
     }
 
-    // Labels below QR
-    let y = 900;
+    let y = 840;
     ctx.fillStyle = textColor;
-    ctx.font = 'normal 32px "Geist Mono", monospace';
-    ctx.fillText("微信二维码", cx, y);
-    y += 50;
+    ctx.font = 'normal 40px "Geist Mono", monospace';
+    ctx.fillText(userName.toUpperCase() || "IMAN GENG", cx, y);
+    y += 56;
 
     ctx.fillStyle = '#878787';
     ctx.font = 'normal 28px "Geist Mono", monospace';
     if (email) { ctx.fillText(email, cx, y); y += 40; }
     if (phone) { ctx.fillText(phone, cx, y); y += 40; }
   } else {
-    // --- Back: photo centered ---
-    if (photoImage) {
-      const photoSize = 500;
-      const photoX = cx - photoSize / 2;
-      const photoY = 280;
-      // White border
+    // --- Back: QR code centered ---
+    if (qrImage) {
+      const qrSize = 480;
+      const qrX = cx - qrSize / 2;
+      const qrY = 360;
       ctx.fillStyle = "#ffffff";
-      ctx.fillRect(photoX - 6, photoY - 6, photoSize + 12, photoSize + 12);
-      ctx.drawImage(photoImage, photoX, photoY, photoSize, photoSize);
+      const padding = 16;
+      ctx.fillRect(qrX - padding, qrY - padding, qrSize + padding * 2, qrSize + padding * 2);
+      ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
     }
 
-    // Name + contacts below photo
-    let y = 840;
+    let y = 900;
     ctx.fillStyle = textColor;
-    ctx.font = 'normal 40px "Geist Mono", monospace';
-    ctx.fillText(userName.toUpperCase() || "IMAN GENG", cx, y);
-    y += 56;
+    ctx.font = 'normal 32px "Geist Mono", monospace';
+    ctx.fillText("微信二维码", cx, y);
+    y += 50;
 
     ctx.fillStyle = '#878787';
     ctx.font = 'normal 28px "Geist Mono", monospace';

@@ -53,10 +53,10 @@ export default function LanyardWithControls({
       <div className="flex flex-col">
         <CardTemplate ref={frontRef} userName={defaultName} variant={defaultVariant} side="front"
           onTextureReady={handleFrontReady} email="767189834@qq.com" phone="17815381850"
-          github="Iman-GGG" wechatQr="/wechatscan.jpg" />
+          photoUrl="/头像" />
         <CardTemplate ref={backRef} userName={defaultName} variant={defaultVariant} side="back"
           onTextureReady={handleBackReady} email="767189834@qq.com" phone="17815381850"
-          photoUrl="/头像" />
+          github="Iman-GGG" wechatQr="/wechatscan.jpg" />
         <div className={containerClassName}>
           <div className="flex h-full items-center justify-center">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
