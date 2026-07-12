@@ -50,6 +50,11 @@ function drawCard(
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
+  // Cover the V0 logo area on the base image
+  const coverColor = textColor === "#ffffff" ? "#0a0a0a" : "#f5f5f5";
+  ctx.fillStyle = coverColor;
+  ctx.fillRect(cx - 380, 200, 760, 760);
+
   if (side === "front") {
     // --- Front: photo centered ---
     if (photoImage) {
