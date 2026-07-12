@@ -27,7 +27,7 @@ const projects = [
     tag: '作品集展示',
     desc: '基于 Next.js + Three.js，带 3D 物理吊牌的个人作品集网站。',
     link: 'https://gengyiman.vercel.app',
-    images: null,
+    images: [1, 2],
     tech: ['Next.js', 'Three.js', 'Vercel'],
   },
 ]
@@ -92,7 +92,21 @@ export default function Features() {
                                         </div>
                                     </div>
                                 )}
-                                {project.images && project.name !== '瞎芝麻' && (
+                                {project.images && project.name === '作品集' && (
+                                    <div className="p-3 bg-muted/30 space-y-2">
+                                        {project.images.map((n) => (
+                                            <Image
+                                                key={n}
+                                                src={`/作品集网站${n}.png`}
+                                                alt={`作品集网站截图 ${n}`}
+                                                width={800}
+                                                height={400}
+                                                className="rounded-lg w-full h-auto"
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                                {project.images && project.name !== '瞎芝麻' && project.name !== '作品集' && (
                                     <div className="grid grid-cols-3 gap-2 p-3 bg-muted/30">
                                         {project.images.map((n) => (
                                             <Image
