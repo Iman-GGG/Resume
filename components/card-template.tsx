@@ -44,28 +44,40 @@ function drawCard(
 
   drawCardBg(ctx, variant);
 
-  // The 3D model's visible area is centered around this x anchor
-  const vx = CANVAS_SIZE / 2 - 55; // 633
+  // Generate a grid to diagnose UV mapping — each cell is 172px (8x8 grid on 1376 canvas)
+  // After viewing, remove this block and position content based on visible grid cells
+  ctx.strokeStyle = textColor;
+  ctx.lineWidth = 4;
+  ctx.font = 'normal 24px "Geist Mono", monospace';
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 8; c++) {
+      const gx = c * 172 + 86;
+      const gy = r * 172 + 86;
+      ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+      ctx.strokeRect(c * 172, r * 172, 172, 172);
+      ctx.fillStyle = 'rgba(255,255,255,0.5)';
+      ctx.fillText(`${c},${r}`, gx, gy);
+    }
+  }
+  return; // STOP — just show grid, skip content
 
   if (side === "front") {
-    // --- Front: name + contacts ---
-    let y = 588;
+    let y = vy - 30;
     ctx.fillStyle = textColor;
-    ctx.font = '600 56px "Geist Mono", monospace';
+    ctx.font = '600 48px "Geist Mono", monospace';
     ctx.fillText(userName.toUpperCase() || "IMAN GENG", vx, y);
-    y += 80;
+    y += 72;
 
     ctx.fillStyle = variant === "dark" ? "#aaaaaa" : "#666666";
-    ctx.font = 'normal 34px "Geist Mono", monospace';
-    if (email) { ctx.fillText(email, vx, y); y += 52; }
-    if (phone) { ctx.fillText(phone, vx, y); y += 52; }
+    ctx.font = 'normal 30px "Geist Mono", monospace';
+    if (email) { ctx.fillText(email, vx, y); y += 46; }
+    if (phone) { ctx.fillText(phone, vx, y); y += 46; }
   } else {
-    // --- Back: QR code ---
-    const qrSize = 480;
+    const qrSize = 380;
     const qrX = vx - qrSize / 2;
-    const qrY = 340;
+    const qrY = vy - qrSize / 2 - 30;
     if (qrImage) {
       ctx.fillStyle = "#ffffff";
       const pad = 16;
@@ -73,16 +85,16 @@ function drawCard(
       ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
     }
 
-    let y = qrY + qrSize + 40;
+    let y = qrY + qrSize + 36;
     ctx.fillStyle = textColor;
-    ctx.font = 'normal 34px "Geist Mono", monospace';
+    ctx.font = 'normal 30px "Geist Mono", monospace';
     ctx.fillText("微信扫码联系", vx, y);
-    y += 52;
+    y += 48;
 
     ctx.fillStyle = variant === "dark" ? "#aaaaaa" : "#666666";
-    ctx.font = 'normal 30px "Geist Mono", monospace';
-    if (email) { ctx.fillText(email, vx, y); y += 44; }
-    if (phone) { ctx.fillText(phone, vx, y); y += 44; }
+    ctx.font = 'normal 26px "Geist Mono", monospace';
+    if (email) { ctx.fillText(email, vx, y); y += 40; }
+    if (phone) { ctx.fillText(phone, vx, y); y += 40; }
   }
 }
 
