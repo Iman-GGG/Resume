@@ -78,26 +78,27 @@ function drawCard(
     if (phone) { ctx.fillText(phone, cx, y); y += 40; }
   } else {
     // --- Back: QR code centered ---
+    const qrSize = 500;
+    const qrX = cx - qrSize / 2 + qrSize * 0.75;
+    const qrY = 440 - qrSize * 0.25;
     if (qrImage) {
-      const qrSize = 500;
-      const qrX = cx - qrSize / 2 + qrSize * 0.75;
-      const qrY = 440 - qrSize * 0.25;
       ctx.fillStyle = "#ffffff";
       const padding = 20;
       ctx.fillRect(qrX - padding, qrY - padding, qrSize + padding * 2, qrSize + padding * 2);
       ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
     }
 
-    let y = 865;
+    const textX = qrX + qrSize / 2;
+    let y = qrY + qrSize + 30;
     ctx.fillStyle = textColor;
     ctx.font = 'normal 32px "Geist Mono", monospace';
-    ctx.fillText("微信二维码", cx, y);
+    ctx.fillText("微信二维码", textX, y);
     y += 50;
 
     ctx.fillStyle = '#878787';
     ctx.font = 'normal 28px "Geist Mono", monospace';
-    if (email) { ctx.fillText(email, cx, y); y += 40; }
-    if (phone) { ctx.fillText(phone, cx, y); y += 40; }
+    if (email) { ctx.fillText(email, textX, y); y += 40; }
+    if (phone) { ctx.fillText(phone, textX, y); y += 40; }
   }
 }
 
