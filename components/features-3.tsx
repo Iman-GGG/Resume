@@ -127,7 +127,7 @@ export default function Features() {
                                         <a href={project.link} target="_blank" rel="noopener noreferrer"
                                             className="inline-flex items-center gap-1 text-sm text-primary hover:underline mt-auto">
                                             <ExternalLink className="size-3" />
-                                            xiazhima.vercel.app
+                                            {project.link.replace('https://', '')}
                                         </a>
                                     )}
                                     {!project.link && (
