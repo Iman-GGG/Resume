@@ -61,11 +61,11 @@ export default function Agenda() {
                             },
                             ...transitionVariants,
                         }}
-                        className="flex flex-col md:flex-row items-stretch justify-center gap-4"
+                        className="flex flex-col md:flex-row items-stretch justify-center gap-0"
                     >
                         {experiences.map((exp, i) => (
                             <React.Fragment key={exp.product}>
-                                <div className="flex-1 max-w-80 rounded-xl bg-white border border-gray-200 p-6 text-black shadow-sm h-full">
+                                <div className="flex-1 max-w-80 rounded-xl bg-white border border-gray-200 p-6 text-black shadow-sm">
                                     <div className="flex items-baseline justify-between gap-2 mb-3">
                                         <span className="font-semibold text-lg">{exp.product}</span>
                                         <span className="text-gray-400 font-mono text-xs shrink-0">{exp.period}</span>
@@ -81,7 +81,7 @@ export default function Agenda() {
                                     </ul>
                                 </div>
                                 {i < experiences.length - 1 && (
-                                    <div className="flex items-center justify-center shrink-0 px-1 py-2 md:py-0">
+                                    <div className="flex items-center justify-center shrink-0 w-10 mx-2">
                                         <svg width="28" height="24" viewBox="0 0 28 24" className="text-gray-400">
                                             <line x1="0" y1="12" x2="24" y2="12" stroke="currentColor" strokeWidth="1.5" />
                                             <polyline points="18,6 24,12 18,18" fill="none" stroke="currentColor" strokeWidth="1.5" />
