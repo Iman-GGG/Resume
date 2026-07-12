@@ -70,7 +70,7 @@ function drawCard(
   } else {
     // --- Back: QR code centered ---
     const qrSize = 500;
-    const qrX = cx - qrSize / 2 + qrSize * 0.75;
+    const qrX = cx - qrSize / 2 + qrSize * 0.75 - 3;
     const qrY = 440 - qrSize * 0.25;
     if (qrImage) {
       ctx.fillStyle = "#ffffff";
