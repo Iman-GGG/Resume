@@ -35,64 +35,62 @@ export default function Agenda() {
                 className="object-cover mix-blend-difference opacity-50"
             />
             <div className="relative scroll-py-16 py-16 md:scroll-py-32 md:py-32">
-                <div className="mx-auto max-w-5xl px-6">
-                    <div className="grid gap-y-12 px-2 lg:grid-cols-[1fr_auto]">
-                        <div className="text-center lg:text-left">
-                            <TextEffect
-                                triggerOnView
-                                preset="fade-in-blur"
-                                speedSegment={0.3}
-                                as="h2"
-                                className="mb-4 text-3xl font-semibold md:text-4xl">
-                                工作经历
-                            </TextEffect>
-                            <p className="text-muted-foreground text-lg">三款 BIM 建筑桌面端设计软件</p>
-                        </div>
-
-                        <AnimatedGroup
+                <div className="mx-auto max-w-6xl px-6">
+                    <div className="text-center mb-12">
+                        <TextEffect
                             triggerOnView
-                            variants={{
-                                container: {
-                                    visible: {
-                                        transition: {
-                                            staggerChildren: 0.05,
-                                            delayChildren: 0.75,
-                                        },
+                            preset="fade-in-blur"
+                            speedSegment={0.3}
+                            as="h2"
+                            className="mb-4 text-3xl font-semibold md:text-4xl">
+                            工作经历
+                        </TextEffect>
+                        <p className="text-muted-foreground text-lg">三款 BIM 建筑桌面端设计软件</p>
+                    </div>
+
+                    <AnimatedGroup
+                        triggerOnView
+                        variants={{
+                            container: {
+                                visible: {
+                                    transition: {
+                                        staggerChildren: 0.1,
+                                        delayChildren: 0.5,
                                     },
                                 },
-                                ...transitionVariants,
-                            }}
-                            className="divide-y divide-dashed sm:mx-auto sm:max-w-lg lg:mx-0"
-                        >
-                                                    {experiences.map((exp, i) => (
-                                <div key={exp.product} className="py-6">
-                                    <div className="rounded-xl bg-white/70 backdrop-blur-md border border-white/50 p-5 text-black">
-                                        <div className="flex items-baseline justify-between gap-4 mb-3">
-                                            <span className="font-semibold text-lg">{exp.product}</span>
-                                            <span className="text-black/50 font-mono text-xs shrink-0">{exp.period}</span>
-                                        </div>
-                                        <p className="text-black/50 text-sm mb-3">{exp.company}</p>
-                                        <ul className="space-y-1">
-                                            {exp.highlights.map((h) => (
-                                                <li key={h} className="text-sm flex items-start gap-2">
-                                                    <span className="text-black/30 mt-1">▸</span>
-                                                    <span>{h}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
+                            },
+                            ...transitionVariants,
+                        }}
+                        className="flex flex-col md:flex-row items-center justify-center gap-2"
+                    >
+                        {experiences.map((exp, i) => (
+                            <React.Fragment key={exp.product}>
+                                <div className="w-full md:w-72 rounded-xl bg-white/70 backdrop-blur-md border border-white/50 p-5 text-black">
+                                    <div className="flex items-baseline justify-between gap-4 mb-3">
+                                        <span className="font-semibold text-lg">{exp.product}</span>
+                                        <span className="text-black/50 font-mono text-xs shrink-0">{exp.period}</span>
                                     </div>
-                                    {i < experiences.length - 1 && (
-                                        <div className="flex justify-center py-2">
-                                            <svg width="24" height="32" viewBox="0 0 24 32" className="text-white/40">
-                                                <line x1="12" y1="0" x2="12" y2="28" stroke="currentColor" strokeWidth="1.5" />
-                                                <polyline points="6,22 12,28 18,22" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                                            </svg>
-                                        </div>
-                                    )}
+                                    <p className="text-black/50 text-sm mb-3">{exp.company}</p>
+                                    <ul className="space-y-1">
+                                        {exp.highlights.map((h) => (
+                                            <li key={h} className="text-sm flex items-start gap-2">
+                                                <span className="text-black/30 mt-1">▸</span>
+                                                <span>{h}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </div>
-                            ))}
-                        </AnimatedGroup>
-                    </div>
+                                {i < experiences.length - 1 && (
+                                    <div className="flex items-center justify-center shrink-0 py-2 md:py-0">
+                                        <svg width="32" height="24" viewBox="0 0 32 24" className="text-white/40">
+                                            <line x1="0" y1="12" x2="28" y2="12" stroke="currentColor" strokeWidth="1.5" />
+                                            <polyline points="22,6 28,12 22,18" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                                        </svg>
+                                    </div>
+                                )}
+                            </React.Fragment>
+                        ))}
+                    </AnimatedGroup>
                 </div>
             </div>
         </section>
