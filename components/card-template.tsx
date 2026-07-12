@@ -56,19 +56,6 @@ function drawCard(
   ctx.textBaseline = "middle";
 
   if (side === "front") {
-    // Crosshair at center point for diagnostic
-    ctx.strokeStyle = '#ff0000';
-    ctx.lineWidth = 4;
-    ctx.beginPath();
-    ctx.moveTo(frontCx - 40, frontCy);
-    ctx.lineTo(frontCx + 40, frontCy);
-    ctx.moveTo(frontCx, frontCy - 40);
-    ctx.lineTo(frontCx, frontCy + 40);
-    ctx.stroke();
-    ctx.fillStyle = '#ff0000';
-    ctx.font = 'normal 20px "Geist Mono", monospace';
-    ctx.fillText(`(${frontCx},${frontCy})`, frontCx + 50, frontCy - 30);
-
     let y = frontCy - 30;
     ctx.fillStyle = textColor;
     ctx.font = '600 46px "Geist Mono", monospace';
@@ -80,19 +67,6 @@ function drawCard(
     if (email) { ctx.fillText(email, frontCx, y); y += 44; }
     if (phone) { ctx.fillText(phone, frontCx, y); y += 44; }
   } else {
-    // Crosshair at center point for diagnostic
-    ctx.strokeStyle = '#ff0000';
-    ctx.lineWidth = 4;
-    ctx.beginPath();
-    ctx.moveTo(backCx - 40, backCy);
-    ctx.lineTo(backCx + 40, backCy);
-    ctx.moveTo(backCx, backCy - 40);
-    ctx.lineTo(backCx, backCy + 40);
-    ctx.stroke();
-    ctx.fillStyle = '#ff0000';
-    ctx.font = 'normal 20px "Geist Mono", monospace';
-    ctx.fillText(`(${backCx},${backCy})`, backCx + 50, backCy - 30);
-
     const qrSize = 340;
     const qrX = backCx - qrSize / 2;
     const qrY = backCy - qrSize / 2 - 20;
