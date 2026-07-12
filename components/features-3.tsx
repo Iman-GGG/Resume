@@ -22,6 +22,14 @@ const projects = [
     images: [1, 2, 3, 4, 5, 6, 7, 8],
     tech: ['微信小程序', '公益'],
   },
+  {
+    name: '个人简历网站',
+    tag: '3D 互动名片 · 作品集',
+    desc: '就是你现在正在看的这个网站。基于 Next.js + Three.js，带 3D 物理吊牌和可导出名片的个人作品集。',
+    link: 'https://gengyiman.vercel.app',
+    images: null,
+    tech: ['Next.js', 'Three.js', 'Vercel'],
+  },
 ]
 
 const certs = [
@@ -45,7 +53,7 @@ export default function Features() {
                     <p className="text-muted-foreground mt-4 text-lg">独立用 AI 开发的作品</p>
                 </div>
 
-                <div className="grid gap-8 md:grid-cols-2">
+                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                     {projects.map((project) => (
                         <AnimatedGroup
                             key={project.name}
@@ -98,10 +106,10 @@ export default function Features() {
                                         ))}
                                     </div>
                                 )}
-                                {/* Placeholder for 瞎芝麻 */}
+                                {/* Placeholder for projects without screenshots */}
                                 {!project.images && (
-                                    <div className="h-40 bg-gradient-to-br from-emerald-900/30 to-blue-900/30 flex items-center justify-center">
-                                        <span className="text-5xl opacity-30">📈</span>
+                                    <div className="h-40 bg-gradient-to-br from-purple-900/30 to-rose-900/30 flex items-center justify-center">
+                                        <span className="text-5xl opacity-30">🎯</span>
                                     </div>
                                 )}
                                 <div className="p-5 flex-1 flex flex-col">
