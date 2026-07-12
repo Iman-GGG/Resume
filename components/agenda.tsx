@@ -91,12 +91,10 @@ export default function Agenda() {
                                     </div>
                                     {/* Image card */}
                                     <div className="rounded-xl bg-white border border-gray-200 overflow-hidden shadow-sm">
-                                        <Image
+                                        <img
                                             src={exp.image}
                                             alt={exp.product}
-                                            width={800}
-                                            height={450}
-                                            className="w-full h-auto object-cover"
+                                            className="w-full h-auto block"
                                         />
                                     </div>
                                     {/* Link */}
