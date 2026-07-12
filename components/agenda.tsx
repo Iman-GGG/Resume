@@ -61,11 +61,11 @@ export default function Agenda() {
                             },
                             ...transitionVariants,
                         }}
-                        className="flex flex-col md:flex-row items-stretch justify-center gap-0"
+                        className="flex flex-col md:flex-row items-stretch justify-center gap-4"
                     >
                         {experiences.map((exp, i) => (
                             <React.Fragment key={exp.product}>
-                                <div className="flex-1 max-w-80 rounded-xl bg-white border border-gray-200 p-6 text-black shadow-sm">
+                                <div className="flex-1 max-w-80 rounded-xl bg-white border border-gray-200 p-6 text-black shadow-sm h-full">
                                     <div className="flex items-baseline justify-between gap-2 mb-3">
                                         <span className="font-semibold text-lg">{exp.product}</span>
                                         <span className="text-gray-400 font-mono text-xs shrink-0">{exp.period}</span>
