@@ -75,15 +75,15 @@ function drawCard(
     // --- Back: QR code centered ---
     if (qrImage) {
       const qrSize = 500;
-      const qrX = cx - qrSize / 2;
-      const qrY = 440;
+      const qrX = cx - qrSize / 2 + qrSize * 0.75;
+      const qrY = 440 - qrSize * 0.25;
       ctx.fillStyle = "#ffffff";
       const padding = 20;
       ctx.fillRect(qrX - padding, qrY - padding, qrSize + padding * 2, qrSize + padding * 2);
       ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
     }
 
-    let y = 990;
+    let y = 865;
     ctx.fillStyle = textColor;
     ctx.font = 'normal 32px "Geist Mono", monospace';
     ctx.fillText("微信二维码", cx, y);
