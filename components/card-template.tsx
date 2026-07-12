@@ -58,7 +58,12 @@ function drawCard(
   ctx.textBaseline = "middle";
 
   if (side === "front") {
-    // Draw front photo centered with multiply blend
+    // Name at top
+    ctx.fillStyle = textColor;
+    ctx.font = '600 92px "Geist Mono", monospace';
+    ctx.fillText("GENG YIMAN", frontCx, 220);
+
+    // Draw front photo centered
     let textStartY = frontCy + 40;
     if (frontPhoto) {
       const imgW = 320;
@@ -71,11 +76,7 @@ function drawCard(
       textStartY = imgY + imgH + 50;
     }
 
-    ctx.fillStyle = textColor;
-    ctx.font = '600 92px "Geist Mono", monospace';
-    ctx.fillText(userName.toUpperCase() || "IMAN GENG", frontCx, textStartY);
-    textStartY += 100;
-
+    // Email and phone below photo
     ctx.fillStyle = variant === "dark" ? "#aaaaaa" : "#666666";
     ctx.font = 'normal 56px "Geist Mono", monospace';
     if (email) { ctx.fillText(email, frontCx, textStartY); textStartY += 72; }
