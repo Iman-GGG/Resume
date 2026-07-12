@@ -44,24 +44,50 @@ function drawCard(
 
   drawCardBg(ctx, variant);
 
-  // Generate a grid to diagnose UV mapping — each cell is 172px (8x8 grid on 1376 canvas)
-  // After viewing, remove this block and position content based on visible grid cells
-  ctx.strokeStyle = textColor;
-  ctx.lineWidth = 4;
-  ctx.font = 'normal 24px "Geist Mono", monospace';
+  // Visible centers from grid analysis:
+  // Front: cells 1-2 x, 2-3 y → center (344, 516)
+  // Back:  cells 5-6 x, 2-3 y → center (1032, 516)
+  const frontCx = 344;
+  const frontCy = 516;
+  const backCx = 1032;
+  const backCy = 516;
+
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  for (let r = 0; r < 8; r++) {
-    for (let c = 0; c < 8; c++) {
-      const gx = c * 172 + 86;
-      const gy = r * 172 + 86;
-      ctx.strokeStyle = 'rgba(255,255,255,0.3)';
-      ctx.strokeRect(c * 172, r * 172, 172, 172);
-      ctx.fillStyle = 'rgba(255,255,255,0.5)';
-      ctx.fillText(`${c},${r}`, gx, gy);
+
+  if (side === "front") {
+    let y = frontCy - 30;
+    ctx.fillStyle = textColor;
+    ctx.font = '600 46px "Geist Mono", monospace';
+    ctx.fillText(userName.toUpperCase() || "IMAN GENG", frontCx, y);
+    y += 70;
+
+    ctx.fillStyle = variant === "dark" ? "#aaaaaa" : "#666666";
+    ctx.font = 'normal 28px "Geist Mono", monospace';
+    if (email) { ctx.fillText(email, frontCx, y); y += 44; }
+    if (phone) { ctx.fillText(phone, frontCx, y); y += 44; }
+  } else {
+    const qrSize = 340;
+    const qrX = backCx - qrSize / 2;
+    const qrY = backCy - qrSize / 2 - 20;
+    if (qrImage) {
+      ctx.fillStyle = "#ffffff";
+      const pad = 14;
+      ctx.fillRect(qrX - pad, qrY - pad, qrSize + pad * 2, qrSize + pad * 2);
+      ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
     }
+
+    let y = qrY + qrSize + 32;
+    ctx.fillStyle = textColor;
+    ctx.font = 'normal 28px "Geist Mono", monospace';
+    ctx.fillText("微信扫码联系", backCx, y);
+    y += 44;
+
+    ctx.fillStyle = variant === "dark" ? "#aaaaaa" : "#666666";
+    ctx.font = 'normal 24px "Geist Mono", monospace';
+    if (email) { ctx.fillText(email, backCx, y); y += 36; }
+    if (phone) { ctx.fillText(phone, backCx, y); y += 36; }
   }
-  return; // STOP — just show grid, skip content
 
   if (side === "front") {
     let y = vy - 30;
