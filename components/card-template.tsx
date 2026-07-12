@@ -82,7 +82,7 @@ function drawCard(
     }
 
     const textX = qrX + qrSize / 2;
-    let y = qrY + qrSize + 30;
+    let y = qrY + qrSize + 36;
     ctx.fillStyle = textColor;
     ctx.font = 'normal 32px "Geist Mono", monospace';
     ctx.fillText("微信二维码", textX, y);
