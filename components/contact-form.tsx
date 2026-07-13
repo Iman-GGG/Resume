@@ -89,7 +89,7 @@ export default function ContactForm() {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-gradient-to-r from-gray-700 to-gray-900 hover:from-gray-900 hover:to-gray-700 border-0 text-white"
+              className="w-full bg-white hover:bg-gray-100 border border-border text-black"
             >
               {isSubmitting ? (
                 "发送中..."

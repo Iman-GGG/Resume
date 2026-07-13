@@ -41,7 +41,11 @@ const certs = [
 
 export default function Features() {
     return (
-        <section id="projects" className="py-16 md:py-32 dark:bg-transparent bg-transparent">
+        <section id="projects" className="relative py-16 md:py-32 dark:bg-transparent bg-transparent">
+            <div className="absolute inset-0 z-0">
+              <div className="absolute left-1/4 top-1/3 h-64 w-64 rounded-full bg-blue-500 opacity-10 blur-3xl" />
+              <div className="absolute bottom-1/4 right-1/4 h-64 w-64 rounded-full bg-purple-500 opacity-10 blur-3xl" />
+            </div>
             <div className="@container mx-auto max-w-5xl px-6">
                 <div className="text-center mb-12">
                     <TextEffect
