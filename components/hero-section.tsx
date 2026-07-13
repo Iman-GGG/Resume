@@ -1,6 +1,4 @@
 import React from 'react'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { TextEffect } from "@/components/motion-primitives/text-effect";
 import { AnimatedGroup } from "@/components/motion-primitives/animated-group";
 import DecryptedText from "@/components/DecryptedText";
@@ -74,38 +72,6 @@ export default function HeroSection() {
                                         {role.label}
                                     </span>
                                 ))}
-                            </AnimatedGroup>
-                            <AnimatedGroup
-                                variants={{
-                                    container: {
-                                        visible: {
-                                            transition: {
-                                                staggerChildren: 0.05,
-                                                delayChildren: 0.75,
-                                            },
-                                        },
-                                    },
-                                    ...transitionVariants,
-                                }}
-                                className="mt-10 flex flex-col items-center justify-center gap-2 sm:flex-row lg:justify-start"
-                            >
-                                <Button
-                                    asChild
-                                    size="lg"
-                                    className="px-5 text-base">
-                                    <Link href="#contact">
-                                        <span className="text-nowrap">联系方式</span>
-                                    </Link>
-                                </Button>
-                                <Button
-                                    asChild
-                                    size="lg"
-                                    variant="ghost"
-                                    className="px-5 text-base bg-black/30 backdrop-blur-sm hover:bg-black/40">
-                                    <Link href="#projects">
-                                        <span className="text-nowrap">查看项目</span>
-                                    </Link>
-                                </Button>
                             </AnimatedGroup>
                         </div>
                     </div>
