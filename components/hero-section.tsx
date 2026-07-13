@@ -84,7 +84,7 @@ export default function HeroSection() {
                 <a
                     href="#projects"
                     aria-label="向下滚动"
-                    className="absolute bottom-[46px] left-1/2 -translate-x-1/2 animate-bounce hidden lg:block"
+                    className="absolute bottom-[37px] left-1/2 -translate-x-1/2 animate-bounce hidden lg:block"
                 >
                     <div className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-white/20 p-1">
                         <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-white/60" />
