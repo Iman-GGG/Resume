@@ -35,6 +35,8 @@ const projects = [
 const certs = [
   { name: '信息系统项目管理师' },
   { name: 'AI 智能体应用师' },
+  { name: 'CET-6' },
+  { name: '普通话二甲' },
 ]
 
 export default function Features() {
@@ -161,7 +163,7 @@ export default function Features() {
                         speedSegment={0.3}
                         as="h2"
                         className="text-balance text-3xl font-semibold lg:text-4xl">
-                        专业认证
+                        持证资质
                     </TextEffect>
                 </div>
                 <div className="flex flex-wrap justify-center gap-4">
