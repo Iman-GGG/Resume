@@ -16,7 +16,7 @@ const roles = [
 export default function HeroSection() {
     return (
         <main className="overflow-x-hidden">
-            <section className='lg:h-screen'>
+            <section className='relative lg:h-screen'>
                 <div className="pb-24 pt-12 md:pb-32 lg:pb-56 lg:pt-44 lg:grid lg:grid-cols-2 lg:grid-rows-1 grid-cols-1 grid-rows-2">
                     <div className="relative mx-auto flex max-w-xl flex-col px-6 lg:block">
                         <div className="mx-auto max-w-2xl text-center lg:ml-0 lg:text-left">
@@ -114,6 +114,16 @@ export default function HeroSection() {
                         containerClassName='lg:absolute lg:top-0 lg:right-0 lg:w-1/2 relative w-full h-screen bg-radial lg:from-transparent lg:to-transparent from-muted to-background select-none'
                         defaultName="GENG YIMAN" />
                 </div>
+
+                <a
+                    href="#projects"
+                    aria-label="向下滚动"
+                    className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce hidden lg:block"
+                >
+                    <div className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-white/20 p-1">
+                        <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-white/60" />
+                    </div>
+                </a>
             </section>
         </main>
     )
