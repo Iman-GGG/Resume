@@ -50,8 +50,8 @@ export default function ContactForm() {
       transition={{ duration: 0.5 }}
       viewport={{ once: true }}
     >
-      <div className="relative overflow-hidden rounded-xl border border-border bg-card/50 backdrop-blur-sm p-6 transition-all duration-300 hover:border-purple-500/50 group">
-        <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 opacity-25 blur transition duration-1000 group-hover:opacity-100 group-hover:duration-200" />
+      <div className="relative overflow-hidden rounded-xl border border-border bg-card/50 backdrop-blur-sm p-6 transition-all duration-300 hover:border-gray-400/50 group">
+        <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-gray-300/10 to-white/10 opacity-25 blur transition duration-1000 group-hover:opacity-100 group-hover:duration-200" />
 
         <div className="relative">
           <h3 className="text-xl font-semibold mb-6">发一条信息给我吧</h3>
@@ -62,34 +62,34 @@ export default function ContactForm() {
               type="text"
               placeholder="你的名字"
               required
-              className="w-full rounded-lg border border-border bg-muted px-4 py-2.5 text-sm outline-none transition-colors focus:border-purple-500 focus:ring-1 focus:ring-purple-500/20 placeholder:text-muted-foreground"
+              className="w-full rounded-lg border border-border bg-muted px-4 py-2.5 text-sm outline-none transition-colors focus:border-gray-400 focus:ring-1 focus:ring-gray-400/20 placeholder:text-muted-foreground"
             />
             <input
               name="email"
               type="email"
               placeholder="你的邮箱"
               required
-              className="w-full rounded-lg border border-border bg-muted px-4 py-2.5 text-sm outline-none transition-colors focus:border-purple-500 focus:ring-1 focus:ring-purple-500/20 placeholder:text-muted-foreground"
+              className="w-full rounded-lg border border-border bg-muted px-4 py-2.5 text-sm outline-none transition-colors focus:border-gray-400 focus:ring-1 focus:ring-gray-400/20 placeholder:text-muted-foreground"
             />
             <input
               name="subject"
               type="text"
               placeholder="主题"
               required
-              className="w-full rounded-lg border border-border bg-muted px-4 py-2.5 text-sm outline-none transition-colors focus:border-purple-500 focus:ring-1 focus:ring-purple-500/20 placeholder:text-muted-foreground"
+              className="w-full rounded-lg border border-border bg-muted px-4 py-2.5 text-sm outline-none transition-colors focus:border-gray-400 focus:ring-1 focus:ring-gray-400/20 placeholder:text-muted-foreground"
             />
             <textarea
               name="message"
               placeholder="你的消息..."
               required
               rows={4}
-              className="w-full rounded-lg border border-border bg-muted px-4 py-2.5 text-sm outline-none transition-colors focus:border-purple-500 focus:ring-1 focus:ring-purple-500/20 placeholder:text-muted-foreground resize-none"
+              className="w-full rounded-lg border border-border bg-muted px-4 py-2.5 text-sm outline-none transition-colors focus:border-gray-400 focus:ring-1 focus:ring-gray-400/20 placeholder:text-muted-foreground resize-none"
             />
 
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-pink-500 hover:to-purple-500 border-0"
+              className="w-full bg-gradient-to-r from-gray-700 to-gray-900 hover:from-gray-900 hover:to-gray-700 border-0 text-white"
             >
               {isSubmitting ? (
                 "发送中..."
