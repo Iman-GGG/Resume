@@ -51,7 +51,7 @@ export default function ContactForm() {
       viewport={{ once: true }}
     >
       <div className="relative overflow-hidden rounded-xl border border-border bg-card/50 backdrop-blur-sm p-6 transition-all duration-300 hover:border-gray-400/50 group">
-        <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-gray-300/10 to-white/10 opacity-25 blur transition duration-1000 group-hover:opacity-100 group-hover:duration-200" />
+        <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-gray-300/10 to-white/10 opacity-25 blur transition duration-1000 group-hover:opacity-50 group-hover:duration-200" />
 
         <div className="relative">
           <h3 className="text-xl font-semibold mb-6">发一条信息给我吧</h3>
