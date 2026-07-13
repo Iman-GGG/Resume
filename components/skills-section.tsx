@@ -24,7 +24,7 @@ export default function SkillsSection() {
         <div className="absolute bottom-1/4 right-1/4 h-64 w-64 rounded-full bg-purple-500 opacity-10 blur-3xl" />
       </div>
 
-      <div className="container relative z-10">
+      <div className="mx-auto max-w-5xl px-6 relative z-10">
         <div className="text-center mb-12">
           <TextEffect
             triggerOnView
